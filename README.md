@@ -1,15 +1,17 @@
 # Lucas Nieto · Portfolio
 
-Full Stack Developer · IA aplicada, automatización y datos.
+[Español](https://gecko2087.github.io/portfolio/) · [English](https://gecko2087.github.io/portfolio/en.html)
 
-## Sitio
+Portfolio de desarrollo full stack, IA aplicada, automatización y datos. La interfaz conecta mi experiencia en operación con escenarios interactivos de atención, reportes e integraciones. Los escenarios y las vistas de proyectos usan datos ficticios y explican sus límites.
 
-https://gecko2087.github.io/portfolio/
+HTML semántico, CSS adaptable y JavaScript sin dependencias de producción. Incluye movimiento reducido, navegación por teclado, CV imprimible y casos de HelpDesk IA, PassForge, GamerHub y Task API. La disponibilidad de los backends originales debe comprobarse por separado de las demos estáticas.
 
-HTML semántico, CSS responsive y JavaScript sin dependencias de producción. Cuatro casos de proyecto: HelpDesk IA, PassForge, GamerHub y Task API. Experiencia en Talking América, formación, CV imprimible y contacto por LinkedIn.
+## Contacto propio
 
-## Desarrollo y mantenimiento
+El formulario ES/EN utiliza una [API Node en Vercel](https://github.com/Gecko2087/portfolio-contact-api), con validación de campos, destinatario fijo, peticiones HMAC hacia Google MailApp, límites persistentes y prevención de envíos duplicados. Las claves y la autorización de correo permanecen en los servidores. Google recibe únicamente permiso para enviar correo, sin acceso a leer la bandeja. No utiliza Formspree.
 
-Servir esta carpeta con cualquier servidor estático. Editar index.html para el contenido y app.js para los casos de proyecto. Actualizar cv.html cuando cambie la experiencia. GitHub Pages publica la rama main desde la raíz; no se necesitan claves, funciones ni base de datos.
+GitHub Pages publica estos archivos estáticos desde `main`; no ejecuta la API. Los servicios gratuitos tienen cuotas y pueden sufrir interrupciones. La confirmación del formulario significa que Google aceptó el envío, no que el destinatario lo haya leído.
 
-Las ilustraciones son vistas conceptuales identificadas como tales. Las demos son URLs documentadas por sus respectivos proyectos y su disponibilidad puede variar. No se publica código ni datos de proyectos privados. Experiencia y formación basadas en el LinkedIn de Lucas, revisado el 30 de septiembre de 2026.
+## Mantenimiento
+
+La fuente y los scripts de generación se mantienen en el proyecto local. Regenerar las versiones ES/EN y validar enlaces y recursos antes de publicar. No incorporar credenciales, datos reales de clientes ni archivos privados al repositorio.
