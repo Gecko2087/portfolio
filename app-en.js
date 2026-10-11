@@ -22,24 +22,3 @@ dialog.addEventListener('close',()=>{document.body.style.overflow='';lastTrigger
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});let count=0;document.querySelectorAll('.project').forEach(card=>{card.hidden=button.dataset.filter!=='all'&&!card.dataset.tags.split(' ').includes(button.dataset.filter);if(!card.hidden)count++;});document.querySelector('#filter-status').textContent=`${count} projects visible`; }));
 document.querySelector('#year').textContent=new Date().getFullYear();
 
-const layers = {
- interface: { title: 'A clear experience.', copy: 'I design flows, states and actions that help people complete a task.', link: 'Explore an interface ↗', demo: 'gamerhub' },
- logic: { title: 'Rules with context.', copy: 'I organize services, validation and permissions. Each case explains the decisions behind the flow.', link: 'Explore a role-based flow ↗', demo: 'taskapi' },
- data: { title: 'Data that connects.', copy: 'I model information and connect APIs. Explore a support flow with classification, priorities and status changes.', link: 'Explore tickets ↗', demo: 'helpdesk' }
-};
-document.querySelectorAll('[data-layer]').forEach(button=>button.addEventListener('click',()=>{
- const layer=layers[button.dataset.layer];
- document.querySelectorAll('[data-layer]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
- document.querySelector('#layer-title').textContent=layer.title;document.querySelector('#layer-copy').textContent=layer.copy;
- document.querySelector('#layer-link').textContent=layer.link;document.querySelector('#layer-link').href=`lab-en.html?project=${layer.demo}`;
-}));
-const roles = {
- fullstack: { label:'FROM FLOW TO PERSISTENCE',title:'Interfaces that connect to services.',copy:'React, Next.js, Node.js and Laravel. Project cases explain the architecture; previews let you explore workflows with fictional data.',demo:'helpdesk',name:'HelpDesk IA' },
- backend: { label:'ENDPOINTS, MODELS AND RESPONSIBILITIES',title:'Logic is part of the product.',copy:'Node.js and Laravel APIs, relational and document models. Task API shows task and role views in an interactive simulation; its case explains the original backend.',demo:'taskapi',name:'Task API' },
- ai: { label:'DEVELOPMENT WITH OPERATIONAL EXPERIENCE',title:'AI within a workflow.',copy:'I integrate AI and automation into operational processes. HelpDesk illustrates classification and human review with simulated analysis; my experience includes internal quality and reporting tools.',demo:'helpdesk',name:'HelpDesk IA' }
-};
-document.querySelectorAll('[data-role]').forEach(button=>button.addEventListener('click',()=>{
- const role=roles[button.dataset.role];document.querySelectorAll('[data-role]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
- document.querySelector('#role-label').textContent=role.label;document.querySelector('#role-title').textContent=role.title;document.querySelector('#role-copy').textContent=role.copy;
- document.querySelector('#role-demo').textContent=`Explore ${role.name} ↗`;document.querySelector('#role-demo').href=`lab-en.html?project=${role.demo}`;
-}));

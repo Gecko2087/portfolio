@@ -22,24 +22,3 @@ dialog.addEventListener('close',()=>{document.body.style.overflow='';lastTrigger
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});let count=0;document.querySelectorAll('.project').forEach(card=>{card.hidden=button.dataset.filter!=='all'&&!card.dataset.tags.split(' ').includes(button.dataset.filter);if(!card.hidden)count++;});document.querySelector('#filter-status').textContent=`${count} proyectos visibles`; }));
 document.querySelector('#year').textContent=new Date().getFullYear();
 
-const layers = {
- interface: { title: 'Una experiencia clara.', copy: 'Diseño flujos, estados y acciones para que cada pantalla ayude a completar una tarea.', link: 'Explorar una interfaz ↗', demo: 'gamerhub' },
- logic: { title: 'Reglas con contexto.', copy: 'Organizo servicios, validaciones y permisos. Cada caso explica las decisiones detrás del flujo.', link: 'Explorar un flujo por roles ↗', demo: 'taskapi' },
- data: { title: 'Datos que conectan.', copy: 'Modelo información y conecto APIs. Explora un flujo de soporte con clasificación, prioridades y estados.', link: 'Explorar tickets ↗', demo: 'helpdesk' }
-};
-document.querySelectorAll('[data-layer]').forEach(button=>button.addEventListener('click',()=>{
- const layer=layers[button.dataset.layer];
- document.querySelectorAll('[data-layer]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
- document.querySelector('#layer-title').textContent=layer.title;document.querySelector('#layer-copy').textContent=layer.copy;
- document.querySelector('#layer-link').textContent=layer.link;document.querySelector('#layer-link').href=`lab.html?project=${layer.demo}`;
-}));
-const roles = {
- fullstack: { label:'DEL FLUJO A LA PERSISTENCIA',title:'Interfaces que conversan con servicios.',copy:'React, Next.js, Node.js y Laravel. Los casos de proyecto explican la arquitectura; las demos permiten explorar los flujos con datos ficticios.',demo:'helpdesk',name:'HelpDesk IA' },
- backend: { label:'ENDPOINTS, MODELOS Y RESPONSABILIDADES',title:'La lógica también es producto.',copy:'APIs con Node.js y Laravel, modelos relacionales y documentales. Task API muestra tareas y vistas por rol en una simulación interactiva; su caso explica el backend original.',demo:'taskapi',name:'Task API' },
- ai: { label:'DESARROLLO CON EXPERIENCIA OPERATIVA',title:'IA dentro de un flujo de trabajo.',copy:'Integro IA y automatización en procesos operativos. HelpDesk permite explorar clasificación y revisión humana con análisis simulado; mi experiencia incluye herramientas internas de calidad y reportes.',demo:'helpdesk',name:'HelpDesk IA' }
-};
-document.querySelectorAll('[data-role]').forEach(button=>button.addEventListener('click',()=>{
- const role=roles[button.dataset.role];document.querySelectorAll('[data-role]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
- document.querySelector('#role-label').textContent=role.label;document.querySelector('#role-title').textContent=role.title;document.querySelector('#role-copy').textContent=role.copy;
- document.querySelector('#role-demo').textContent=`Probar ${role.name} ↗`;document.querySelector('#role-demo').href=`lab.html?project=${role.demo}`;
-}));

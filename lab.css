@@ -3,3 +3,11 @@
 .mt-15{margin-top:15px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}.mt-35{margin-top:35px}.width-auto{width:auto}.flex-input{flex:1;min-width:180px}.align-end{align-self:flex-end}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 .locale-switch{display:flex;gap:6px;margin:20px 0}.locale-switch a{border:1px solid #3b4b49;border-radius:20px;padding:6px 12px;font-size:11px}.locale-switch a[aria-current=page]{background:#cef378;color:#101418}
+
+/* Project identities: a focused product surface rather than the portfolio theme. */
+body[data-project="helpdesk"]{--accent:#92ecd9;--bg:#0e171b;--surface:#15232a;--line:#2b4149}
+body[data-project="passforge"]{--accent:#c5b0ff;--bg:#14111f;--surface:#211c30;--line:#39304c}
+body[data-project="gamerhub"]{--accent:#f4bf75;--bg:#14131b;--surface:#201e2c;--line:#383547}
+body[data-project="taskapi"]{--accent:#9dc8ff;--bg:#101723;--surface:#1a2535;--line:#30425b}
+.app-heading{padding-top:12px}.app-heading h2{font-size:clamp(32px,4vw,58px);letter-spacing:-2px}.demo-notice{font-size:12px}.game-cover{min-height:180px;position:relative;overflow:hidden}.game-cover:before{content:'';position:absolute;width:180px;height:180px;right:-45px;top:-55px;border:1px solid #ffffff38;border-radius:35%;transform:rotate(30deg)}.game-card:nth-child(2n) .game-cover{background:linear-gradient(135deg,#302349,#563250)}.game-card:nth-child(3n) .game-cover{background:linear-gradient(135deg,#24413c,#1b302a)}.game-card:nth-child(4n) .game-cover{background:linear-gradient(135deg,#544127,#2c2922)}.game-card .row{flex-wrap:wrap;gap:8px}.game-detail{width:min(540px,calc(100% - 32px));padding:28px;color:var(--text);border:1px solid var(--line);border-radius:18px;background:var(--surface)}.game-detail::backdrop{background:#03060bd9;backdrop-filter:blur(8px)}.game-detail>*{margin-bottom:18px}.game-detail>button{float:right}.game-detail h2{clear:both}.task-card>.quiet{margin-top:14px}.panel:focus-within{border-color:var(--accent)}
+@media(prefers-reduced-motion:no-preference){.game-card{transition:transform .2s,border-color .2s}.game-card:hover{transform:translateY(-4px);border-color:var(--accent)}}
