@@ -6,11 +6,13 @@ Portfolio de desarrollo full stack, IA aplicada, automatización y datos. La int
 
 HTML semántico, CSS adaptable y JavaScript sin dependencias de producción. Incluye movimiento reducido, navegación por teclado, CV imprimible y casos de HelpDesk IA, PassForge, GamerHub y Task API. La disponibilidad de los backends originales debe comprobarse por separado de las demos estáticas.
 
-## Código con contexto
+## De la idea. A la experiencia.
 
-Identidad editorial propia: papel, tinta y acento rojizo; diagrama SVG de personas, datos y servicios; archivo de proyectos con notas sobre qué revisar. El recorrido por perfil abre directamente el caso técnico relevante y devuelve el foco al atajo al cerrar. La implementación real del contacto se presenta como un caso adicional con código público, separado de las simulaciones.
+Diseño desarrollado con Google Stitch y adaptado a la implementación del portfolio: sistema Obsidian Terminal, carbón mate, acentos menta/cian, Plus Jakarta Sans, Inter y JetBrains Mono. La composición combina tipografía de gran escala, interfaces en profundidad y escenas de proyecto con identidad propia. El contenido técnico de la generación se revisó y se reemplazaron las métricas y afirmaciones no verificadas por los hechos de los proyectos.
 
-`atelier.css` y `atelier.js` se aplican solo a las páginas del portfolio. Las versiones ES/EN comparten estructura y comportamiento; el generador conserva las versiones de recursos en sus URLs. Se revisaron móvil de 320 y 390 px, filtros, casos, Escape y el formulario sin enviar nuevos correos.
+El banco de interfaces de la portada incluye cuatro acciones locales: cambiar la prioridad de un ticket, mostrar un registro ficticio, marcar un juego de muestra como favorito y completar/reiniciar tareas. Un recorrido interactivo conecta idea, interfaz, API y persistencia. Los estados viven en memoria y no envían datos ni se presentan como llamadas a los backends originales.
+
+`immersive.css`, `stitch.css`, `immersive.js` y `stitch.js` se aplican a las páginas ES/EN del portfolio. El movimiento puede pausarse y respeta las preferencias del sistema. Los controles admiten teclado, los filtros ocultan los proyectos correspondientes y los casos técnicos devuelven el foco al control que los abrió. Las demos, el CV y el transporte de contacto conservan sus implementaciones independientes.
 
 ## Contacto propio
 
