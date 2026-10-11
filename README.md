@@ -12,14 +12,14 @@ cinema.css y cinema.js implementan la portada. Los selectores admiten flechas, I
 
 ## Demos públicas
 
-Son aplicaciones independientes ejecutadas en el navegador con datos ficticios y estados temporales. No prueban la disponibilidad de los backends originales.
+HelpDesk abre la aplicación original desplegada. PassForge, GamerHub y Task API continúan como labs independientes ejecutados en el navegador con datos ficticios y estados temporales.
 
-- HelpDesk: reglas locales, creación y resolución de tickets. Esta demo no llama a Gemini.
+- HelpDesk: interfaz React conectada a una API Express y PostgreSQL reales. Cada visitante obtiene un espacio aislado con datos ficticios que vence después de una hora. El análisis usa Gemini 3.5 Flash Lite cuando el proveedor está disponible y reglas locales como respaldo. La API aplica límites de uso y la interfaz pública está actualmente en español.
 - PassForge: generación real con Web Crypto, copia y bóveda ficticia sin autenticación ni persistencia. No introducir contraseñas personales.
 - GamerHub: catálogo ficticio, filtros, detalles y favoritos locales.
 - Task API: tablero por roles y respuestas de API simuladas.
 
-Los repositorios enlazados contienen las implementaciones originales con servidor y persistencia. Su disponibilidad debe comprobarse por separado.
+La disponibilidad de los servicios externos puede variar. El código del servidor mantiene claves y credenciales fuera del cliente y del repositorio público; nunca deben incorporarse secretos a los archivos estáticos del portfolio.
 
 ## Contacto propio
 
