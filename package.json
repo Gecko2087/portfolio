@@ -1,0 +1,11 @@
+{
+  "name": "portfolio-lucas-nieto",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-static.mjs",
+    "check": "node scripts/check-static.mjs",
+    "deploy:cloudflare": "npm run build && wrangler deploy"
+  },
+  "devDependencies": { "wrangler": "4.155.0" }
+}
