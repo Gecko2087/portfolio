@@ -49,5 +49,44 @@ if (backToTop && intro && 'IntersectionObserver' in window) {
     backToTop.hidden = intro.getBoundingClientRect().bottom > 0;
   });
 }
+// Keep the section navigation and reading indicator in sync with the viewport.
+const sectionLinks = [...document.querySelectorAll('.nav nav a[href^="#"], .career-map a[href^="#"]')];
+const sections = ['inicio', 'proyectos', 'sobre', 'contacto'].map(id => document.getElementById(id));
+const meter = document.querySelector('.reading-progress');
+let frame = 0;
+let currentSection;
+function updateReadingPosition() {
+  frame = 0;
+  const scrollRange = document.documentElement.scrollHeight - innerHeight;
+  const progress = scrollRange > 0 ? Math.min(1, Math.max(0, scrollY / scrollRange)) : 0;
+  meter.style.transform = `scaleX(${progress})`;
+  const threshold = Math.min(innerHeight * .35, 240);
+  const current = progress >= .995 && scrollRange > 0
+    ? sections.at(-1)
+    : sections.findLast(section => section.getBoundingClientRect().top <= threshold);
+  if (current === currentSection) return;
+  currentSection = current;
+  sectionLinks.forEach(link => {
+    if (link.hash === '#' + current?.id) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+}
+function scheduleReadingUpdate() {
+  if (!frame) frame = requestAnimationFrame(updateReadingPosition);
+}
+window.addEventListener('scroll', scheduleReadingUpdate, { passive: true });
+window.addEventListener('resize', scheduleReadingUpdate);
+window.addEventListener('load', scheduleReadingUpdate, { once: true });
+scheduleReadingUpdate();
+
+document.querySelectorAll('[data-feature]').forEach(button => {
+  button.addEventListener('click', () => {
+    const tab = tabs.find(item => item.dataset.showcase === button.dataset.feature);
+    if (!tab) return;
+    select(tab.dataset.showcase);
+    tab.focus({ preventScroll: true });
+    stage.scrollIntoView({ block: 'start' });
+  });
+});
 if(en)select(active);
 })();

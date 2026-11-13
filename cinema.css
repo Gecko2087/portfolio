@@ -167,3 +167,60 @@ body::before { z-index: -1; }
 .back-to-top span:last-child { color: var(--mint); font-size: 1.15rem; }
 .portfolio-notice { bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 54px); }
 body:has(.back-to-top[hidden]) .portfolio-notice { bottom: 1rem; }
+
+/* Reading position and project interactions */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  background: #080a10f5;
+}
+.nav nav a[aria-current="location"] {
+  color: var(--mint);
+  text-decoration: underline;
+  text-underline-offset: .3em;
+}
+.career-map a[aria-current="location"] {
+  border-color: var(--mint);
+  background: #203431;
+}
+.reading-progress {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 13;
+  height: 2px;
+  background: linear-gradient(90deg, var(--mint), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+#showcase { scroll-margin-top: 1rem; }
+.work-card {
+  --project-accent: #94ebd9;
+  position: relative;
+}
+#project-passforge { --project-accent: #b3a3ff; }
+#project-gamerhub { --project-accent: #d0f498; }
+.work-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--project-accent);
+  opacity: .55;
+  z-index: 1;
+  pointer-events: none;
+}
+.work-card:is(:hover, :focus-within) { border-color: var(--project-accent); }
+.work-card:is(:hover, :focus-within) .work-heading > span { color: var(--project-accent); }
+.work-actions .feature-project { color: var(--project-accent); }
+footer { min-height: 5rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .work-card:focus-within { transform: translateY(-3px); }
+  .work-card:focus-within .work-image img { transform: scale(1.025); }
+  body.motion-paused .work-card, body.motion-paused .work-card .work-image img { transform: none; }
+}
+@media (max-width: 760px) {
+  html { scroll-padding-top: 124px; }
+}
