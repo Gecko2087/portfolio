@@ -36,17 +36,11 @@ document.querySelectorAll('[data-project="gamerhub"]').forEach(button=>button.ad
 }));
 const backToTop = document.querySelector('#back-to-top');
 const intro = document.querySelector('.recruiter-hero');
-if (backToTop && intro && 'IntersectionObserver' in window) {
-  const observer = new IntersectionObserver(([entry]) => {
-    const pastIntro = entry.boundingClientRect.bottom <= 0;
-    if (pastIntro || document.activeElement !== backToTop) backToTop.hidden = !pastIntro;
-  });
-  observer.observe(intro);
-  backToTop.addEventListener('click', () => {
+if (backToTop && intro) {
+  backToTop.addEventListener('click', event => {
+    event.preventDefault();
     document.querySelector('#inicio').focus({ preventScroll: true });
-  });
-  backToTop.addEventListener('blur', () => {
-    backToTop.hidden = intro.getBoundingClientRect().bottom > 0;
+    window.scrollTo({ top: 0 });
   });
 }
 // Keep the section navigation and reading indicator in sync with the viewport.
@@ -57,6 +51,7 @@ let frame = 0;
 let currentSection;
 function updateReadingPosition() {
   frame = 0;
+  if (backToTop && intro) backToTop.hidden = intro.getBoundingClientRect().bottom > 0;
   const scrollRange = document.documentElement.scrollHeight - innerHeight;
   const progress = scrollRange > 0 ? Math.min(1, Math.max(0, scrollY / scrollRange)) : 0;
   meter.style.transform = `scaleX(${progress})`;
