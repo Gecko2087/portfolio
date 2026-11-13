@@ -108,3 +108,62 @@ body.motion-paused .map-root::after, body.motion-paused .map-branches a::before 
 @media (max-width: 760px) {
   .recruiter-hero { grid-template-columns: 1fr; }
 }
+
+/* Compact screenshots and scroll navigation */
+.work-grid { align-items: start; }
+.work-image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top center;
+}
+.work-copy > p { font-size: .88rem; }
+.work-copy > p.stack { font-size: .75rem; color: var(--muted); }
+.work-actions { gap: .25rem 1rem; font-size: .82rem; }
+.work-actions :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: inherit;
+}
+footer a { font-size: .85rem; }
+
+body::before {
+  z-index: auto;
+  height: min(1050px, 155vh);
+  background:
+    radial-gradient(ellipse at 83% 24%, #5849ad33, transparent 55%),
+    radial-gradient(ellipse at 12% 52%, #13776526, transparent 49%),
+    repeating-linear-gradient(0deg, #b8c3fa09 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(90deg, #b8c3fa09 0 1px, transparent 1px 46px);
+  mask-image: linear-gradient(#000, #000 30%, transparent 98%);
+}
+body { isolation: isolate; }
+body::before { z-index: -1; }
+@media (prefers-reduced-motion: no-preference) {
+  body:not(.motion-paused)::before { animation: ambient-arrival 1.2s ease-out both; }
+  @keyframes ambient-arrival { from { opacity: .35; } to { opacity: 1; } }
+}
+.back-to-top {
+  position: fixed;
+  z-index: 19;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 44px;
+  padding: .55rem .85rem;
+  border: 1px solid #637a78;
+  border-radius: 999px;
+  background: #142424;
+  color: #ecfff9;
+  font-size: .85rem;
+  box-shadow: 0 .35rem 1.3rem #0009;
+}
+.back-to-top[hidden] { display: none; }
+.back-to-top:is(:hover, :focus-visible) { border-color: var(--mint); }
+.back-to-top span:last-child { color: var(--mint); font-size: 1.15rem; }
+.portfolio-notice { bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 54px); }
+body:has(.back-to-top[hidden]) .portfolio-notice { bottom: 1rem; }

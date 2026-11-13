@@ -34,5 +34,20 @@ document.querySelectorAll('[data-project="gamerhub"]').forEach(button=>button.ad
   const note=document.querySelector('#case-content .source-note');
   if(note)note.textContent=en?'The original live demo uses a temporary visitor session. The interface is in Spanish.':'La demo original utiliza una sesión temporal de visitante.';
 }));
+const backToTop = document.querySelector('#back-to-top');
+const intro = document.querySelector('.recruiter-hero');
+if (backToTop && intro && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(([entry]) => {
+    const pastIntro = entry.boundingClientRect.bottom <= 0;
+    if (pastIntro || document.activeElement !== backToTop) backToTop.hidden = !pastIntro;
+  });
+  observer.observe(intro);
+  backToTop.addEventListener('click', () => {
+    document.querySelector('#inicio').focus({ preventScroll: true });
+  });
+  backToTop.addEventListener('blur', () => {
+    backToTop.hidden = intro.getBoundingClientRect().bottom > 0;
+  });
+}
 if(en)select(active);
 })();
