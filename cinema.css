@@ -224,3 +224,13 @@ footer { min-height: 5rem; }
 @media (max-width: 760px) {
   html { scroll-padding-top: 124px; }
 }
+
+/* Four projects, with room for their screenshots and actions. */
+.work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#project-taskapi { --project-accent: #ffbf96; }
+@media (min-width: 1360px) {
+  .work-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .work-grid { grid-template-columns: minmax(0, 1fr); }
+}
