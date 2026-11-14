@@ -346,3 +346,21 @@ body.motion-paused .showcase-panel > a { transform: none; }
   .nav-tools { margin-left: 0; }
   .language-switch a { min-width: 1.75rem; min-height: 1.9rem; }
 }
+
+/* Keep the card edges and action rows aligned within each grid row. */
+.work-grid { align-items: stretch; }
+.work-grid > .work-card { display: flex; flex-direction: column; }
+.work-card .work-image { flex: 0 0 auto; }
+.work-card .work-copy { display: flex; flex: 1; flex-direction: column; }
+.work-card .work-actions { margin-top: auto; padding-top: 1rem; }
+.work-grid > .work-card:is(:hover, :focus-within) { transform: none; }
+
+@media (min-width: 641px) {
+  .work-card .work-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  .work-card .work-actions button { text-align: left; }
+  .work-card .work-actions a:last-child { grid-column: 2; grid-row: 2; }
+}
