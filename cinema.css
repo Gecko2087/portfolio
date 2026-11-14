@@ -264,3 +264,85 @@ footer { min-height: 5rem; }
   }
 }
 body.motion-paused .showcase-panel > a { transform: none; }
+
+/* First-screen motion: the map rises in layers and the signal reaches each link. */
+.nav { padding-inline: clamp(.65rem, 2vw, 2rem); }
+.nav-tools { gap: clamp(.4rem, 1vw, 1rem); }
+.language-switch {
+  display: inline-flex;
+  gap: .15rem;
+  padding: .2rem;
+  border: 1px solid var(--line);
+  border-radius: .65rem;
+}
+.language-switch a {
+  display: grid;
+  place-items: center;
+  min-width: 2.15rem;
+  min-height: 2.15rem;
+  border-radius: .4rem;
+}
+.language-switch a:is(:hover, [aria-current]) { background: #23263a; color: var(--text); }
+
+.career-map {
+  isolation: isolate;
+  position: relative;
+  perspective: 800px;
+}
+.career-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(ellipse at 30% 48%, #5fbfb22b, transparent 65%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body:not(.motion-paused) .recruiter-hero { animation: none; }
+  body:not(.motion-paused) .identity-name,
+  body:not(.motion-paused) .recruiter-hero h1,
+  body:not(.motion-paused) .identity-intro,
+  body:not(.motion-paused) .identity-actions {
+    animation: hero-layer .78s cubic-bezier(.16, 1, .3, 1) both;
+  }
+  body:not(.motion-paused) .recruiter-hero h1 { animation-delay: .10s; }
+  body:not(.motion-paused) .identity-intro { animation-delay: .19s; }
+  body:not(.motion-paused) .identity-actions { animation-delay: .28s; }
+  body:not(.motion-paused) .career-map {
+    animation: map-layer 1s cubic-bezier(.16, 1, .3, 1) both;
+  }
+  body:not(.motion-paused) .career-map::after {
+    animation: map-signal 1.55s ease-out both;
+  }
+  body:not(.motion-paused) .map-branches a {
+    animation: node-layer .65s cubic-bezier(.16, 1, .3, 1) both;
+    animation-delay: var(--node-delay, .20s);
+  }
+  .map-branches a:nth-child(2) { --node-delay: .34s; }
+  .map-branches a:nth-child(3) { --node-delay: .48s; }
+  .map-branches a::before { animation-delay: var(--node-delay, .20s) !important; }
+
+  @keyframes hero-layer {
+    from { opacity: .3; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes map-layer {
+    from { opacity: .4; transform: translateY(20px) perspective(800px) rotateX(12deg) rotateY(-9deg); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes node-layer {
+    from { opacity: .4; translate: -22px 0; }
+    to { opacity: 1; translate: 0 0; }
+  }
+  @keyframes map-signal {
+    from { opacity: 0; transform: translateX(-12%); }
+    45% { opacity: 1; }
+    to { opacity: .45; transform: translateX(0); }
+  }
+}
+@media (max-width: 370px) {
+  .nav { width: calc(100% - 24px); }
+  .nav-tools { margin-left: 0; }
+  .language-switch a { min-width: 1.75rem; min-height: 1.9rem; }
+}
