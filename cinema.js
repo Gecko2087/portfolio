@@ -8,7 +8,7 @@ const projects={
 const tabs=[...document.querySelectorAll('[data-showcase]')], stage=document.querySelector('#showcase');
 const image=document.querySelector('#showcase-image'); let active='helpdesk';
 function setDestination(link,href){link.href=href;const external=href.startsWith('https://');if(external){link.target='_blank';link.rel='noopener noreferrer';}else{link.removeAttribute('target');link.removeAttribute('rel');}}
-function select(key){if(!projects[key])return;active=key;const p=projects[key],demo=p.demo||prefix+'?project='+key;tabs.forEach(tab=>{const selected=tab.dataset.showcase===key;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;});document.querySelector('#showcase-panel').setAttribute('aria-labelledby','tab-'+key);document.querySelector('#showcase-index').textContent=p.index+' / 03';document.querySelector('#showcase-type').textContent=p.index+' / '+p.type;const title=document.querySelector('#showcase-title');title.replaceChildren(document.createTextNode(p.name));const arrow=document.createElement('span');arrow.textContent='↗';title.append(arrow);document.querySelector('#showcase-description').textContent=p.description;document.querySelector('#showcase-stack').textContent=p.stack;document.querySelector('#showcase-boundary').textContent=p.boundary;document.querySelector('#screen-label').textContent=p.name.toUpperCase()+' / DEMO';setDestination(document.querySelector('#showcase-demo'),demo);document.querySelector('#showcase-code').href='https://github.com/Gecko2087/'+p.repo;const link=document.querySelector('#showcase-image-link');setDestination(link,demo);link.setAttribute('aria-label',(en?'Try ':'Probar ')+p.name);stage.classList.remove('is-changing');image.onload=()=>{stage.classList.add('is-changing');};image.src=key==='helpdesk'?'project-helpdesk-live.webp':key==='gamerhub'?'project-gamerhub-live.webp':'project-'+key+(en?'-en':'')+'.png';image.alt=(en?'Authentic screenshot of the interactive demo of ':'Captura auténtica de la demo interactiva de ')+p.name+(en?' with fictional data':' con datos ficticios');}
+function select(key){if(!projects[key])return;active=key;const p=projects[key],demo=p.demo||prefix+'?project='+key;tabs.forEach(tab=>{const selected=tab.dataset.showcase===key;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;});document.querySelector('#showcase-panel').setAttribute('aria-labelledby','tab-'+key);document.querySelector('#showcase-index').textContent=p.index+' / 03';document.querySelector('#showcase-type').textContent=p.index+' / '+p.type;const title=document.querySelector('#showcase-title');title.replaceChildren(document.createTextNode(p.name));const arrow=document.createElement('span');arrow.textContent='↗';title.append(arrow);document.querySelector('#showcase-description').textContent=p.description;document.querySelector('#showcase-stack').textContent=p.stack;document.querySelector('#showcase-boundary').textContent=p.boundary;document.querySelector('#screen-label').textContent=p.name.toUpperCase()+' / DEMO';setDestination(document.querySelector('#showcase-demo'),demo);document.querySelector('#showcase-code').href='https://github.com/Gecko2087/'+p.repo;const link=document.querySelector('#showcase-image-link');setDestination(link,demo);link.setAttribute('aria-label',(en?'Try ':'Probar ')+p.name);stage.classList.remove('is-changing');void stage.offsetWidth;stage.classList.add('is-changing');image.src=key==='helpdesk'?'project-helpdesk-live.webp':key==='gamerhub'?'project-gamerhub-live.webp':'project-'+key+(en?'-en':'')+'.png';image.alt=(en?'Authentic screenshot of the interactive demo of ':'Captura auténtica de la demo interactiva de ')+p.name+(en?' with fictional data':' con datos ficticios');}
 tabs.forEach((tab,index)=>{tab.addEventListener('click',()=>select(tab.dataset.showcase));tab.addEventListener('keydown',event=>{let next=index;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();select(tabs[next].dataset.showcase);tabs[next].focus();});});
 document.querySelectorAll('[data-project="helpdesk"]').forEach(button=>button.addEventListener('click',()=>{const links=[...document.querySelectorAll('#case-content .dialog-links a')],demoLink=links.find(link=>link.href.includes('project=helpdesk'));if(demoLink)setDestination(demoLink,helpdeskDemo);const note=document.querySelector('#case-content .source-note');if(note)note.textContent=en?'The public demo runs on Workers and D1. Workspaces expire after one hour and analysis uses rules while Gemini is pending. The interface is in Spanish.':'La demo pública usa Workers y D1. Cada espacio vence después de una hora y el análisis funciona por reglas mientras se habilita Gemini.';}));
 const toggle=document.querySelector('#motion-toggle');toggle.addEventListener('click',()=>{const paused=document.body.classList.toggle('motion-paused');toggle.setAttribute('aria-pressed',String(paused));toggle.setAttribute('aria-label',en?(paused?'Enable animations':'Pause animations'):(paused?'Activar animaciones':'Pausar animaciones'));toggle.textContent=paused?'▷':'Ⅱ';});
@@ -82,6 +82,32 @@ document.querySelectorAll('[data-feature]').forEach(button => {
     tab.focus({ preventScroll: true });
     stage.scrollIntoView({ block: 'start' });
   });
+});
+const motionAllowed = matchMedia('(prefers-reduced-motion: no-preference)');
+if ('IntersectionObserver' in window && motionAllowed.matches) {
+  const cards = document.querySelectorAll('.work-card');
+  const reveal = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('card-arrived');
+      reveal.unobserve(entry.target);
+    }
+  }, { threshold: .15 });
+  cards.forEach(card => reveal.observe(card));
+}
+
+const preview = document.querySelector('#showcase-image-link');
+preview.addEventListener('pointermove', event => {
+  if (event.pointerType !== 'mouse' || !motionAllowed.matches || document.body.classList.contains('motion-paused')) return;
+  const rect = preview.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width - .5;
+  const y = (event.clientY - rect.top) / rect.height - .5;
+  preview.style.setProperty('--preview-x', (y * -6) + 'deg');
+  preview.style.setProperty('--preview-y', (x * 8) + 'deg');
+});
+preview.addEventListener('pointerleave', () => {
+  preview.style.removeProperty('--preview-x');
+  preview.style.removeProperty('--preview-y');
 });
 if(en)select(active);
 })();

@@ -234,3 +234,33 @@ footer { min-height: 5rem; }
 @media (max-width: 640px) {
   .work-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Depth follows the pointer on desktop. Cards enter once as you reach them. */
+@media (prefers-reduced-motion: no-preference) {
+  body:not(.motion-paused) .map-root {
+    animation: orbit-arrival .75s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes orbit-arrival {
+    from { box-shadow: 0 0 0 16px #94ebd900; }
+    50% { box-shadow: 0 0 0 8px #94ebd94a; }
+    to { box-shadow: 0 0 0 16px #94ebd900; }
+  }
+  body:not(.motion-paused) .card-arrived {
+    animation: card-arrival .52s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .card-arrived:nth-child(even) { animation-delay: 70ms !important; }
+  @keyframes card-arrival {
+    from { opacity: .68; translate: 0 14px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+  body:not(.motion-paused) .is-changing .showcase-copy {
+    animation: screen-arrive .34s ease-out both;
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body:not(.motion-paused) .showcase-panel > a:is(:hover, :focus-visible) {
+    transform: perspective(1000px) rotateX(var(--preview-x, 0deg)) rotateY(var(--preview-y, 0deg));
+    transition: transform .18s ease-out;
+  }
+}
+body.motion-paused .showcase-panel > a { transform: none; }
