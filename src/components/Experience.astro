@@ -1,0 +1,7 @@
+---
+const { lang, experience } = Astro.props;
+---
+<section id="sobre" class="wrap section-space">
+  <h2 class="section-title mb-7">{lang === 'en' ? 'Experience' : 'Experiencia'}</h2>
+  <div class="experience-panel surface" data-reveal set:html={experience} />
+</section>

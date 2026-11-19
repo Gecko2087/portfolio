@@ -1,0 +1,207 @@
+const root = document.documentElement;
+const en = root.lang === 'en';
+const themePreference = matchMedia('(prefers-color-scheme: light)');
+const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+const desktop = matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)');
+const themeButton = document.querySelector('#theme-toggle');
+const motionButton = document.querySelector('#motion-toggle');
+const stage = document.querySelector('.scene');
+const image = document.querySelector('#hero-preview-image');
+const imageButton = document.querySelector('#hero-image-open');
+const previewDemo = document.querySelector('#preview-demo');
+const previewButtons = [...document.querySelectorAll('[data-preview]')];
+const screenshot = document.querySelector('#screenshot-dialog');
+const sectionLinks = [...document.querySelectorAll('.header-row nav a')];
+const progress = document.querySelector('.reading-progress');
+const topLink = document.querySelector('#back-to-top');
+let pausedByUser = false;
+let webgl;
+let preparingWebgl = false;
+let webglUnavailable = false;
+let motion;
+let motionContext;
+let previewAnimation;
+let selection = 0;
+let pendingScroll = false;
+const canAnimate = () => !pausedByUser && !motionPreference.matches;
+const canRender = () => canAnimate() && desktop.matches && !webglUnavailable;
+
+function updateThemeButton() {
+  const isLight = (root.dataset.theme ?? (themePreference.matches ? 'light' : 'dark')) === 'light';
+  themeButton.textContent = isLight ? '☾' : '☼';
+  themeButton.setAttribute('aria-pressed', String(isLight));
+  themeButton.setAttribute('aria-label', en ? 'Light theme' : 'Tema claro');
+  themeButton.title = en ? (isLight ? 'Switch to dark theme' : 'Switch to light theme')
+    : (isLight ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro');
+}
+themeButton.addEventListener('click', () => {
+  root.dataset.theme = themeButton.getAttribute('aria-pressed') === 'true' ? 'dark' : 'light';
+  try { localStorage.setItem('portfolio-theme', root.dataset.theme); } catch {}
+  updateThemeButton();
+});
+themePreference.addEventListener('change', updateThemeButton);
+updateThemeButton();
+themeButton.hidden = false;
+
+async function prepareMotion() {
+  if (!motion) {
+    const [{ gsap }, { ScrollTrigger }] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')]);
+    gsap.registerPlugin(ScrollTrigger);
+    motion = gsap;
+  }
+  if (!canAnimate() || motionContext) return;
+  motionContext = motion.context(() => {
+    if (scrollY < 80 && desktop.matches) {
+      motion.from('[data-hero-motion]', {
+        y: 12, duration: .55, stagger: .065, clearProps: 'transform',
+      });
+    }
+    document.querySelectorAll('[data-reveal]').forEach(card => {
+      if (card.getBoundingClientRect().top < innerHeight) return;
+      motion.from(card, {
+        y: 24, opacity: .55, duration: .58, clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: card, start: 'top 94%', once: true },
+      });
+    });
+  });
+}
+
+async function prepareWebgl() {
+  if (preparingWebgl || webgl || !canRender()) return;
+  preparingWebgl = true;
+  try {
+    const { mountScene } = await import('./scene');
+    webgl = await mountScene(stage, canRender);
+    if (!webgl && canRender()) webglUnavailable = true;
+  } catch {
+    webglUnavailable = true;
+  } finally {
+    preparingWebgl = false;
+  }
+}
+
+function updateMotion() {
+  const paused = !canAnimate();
+  document.body.classList.toggle('motion-paused', paused);
+  motionButton.setAttribute('aria-pressed', String(paused));
+  motionButton.setAttribute('aria-label', en
+    ? (paused ? 'Enable animations' : 'Pause animations')
+    : (paused ? 'Activar animaciones' : 'Pausar animaciones'));
+  motionButton.disabled = motionPreference.matches;
+  motionButton.textContent = paused ? '▷' : 'Ⅱ';
+  if (paused) {
+    motionContext?.revert();
+    motionContext = undefined;
+    previewAnimation?.revert();
+  } else {
+    prepareMotion().catch(() => {});
+  }
+  if (!canRender()) {
+    webgl?.dispose();
+    webgl = undefined;
+  }
+}
+
+function queueWebgl() {
+  if (!canRender()) return;
+  if ('requestIdleCallback' in window) requestIdleCallback(prepareWebgl, { timeout: 2000 });
+  else setTimeout(prepareWebgl, 250);
+}
+motionButton.addEventListener('click', () => {
+  pausedByUser = !pausedByUser;
+  updateMotion();
+  if (document.readyState === 'complete') queueWebgl();
+});
+motionPreference.addEventListener('change', () => { updateMotion(); queueWebgl(); });
+desktop.addEventListener('change', () => { updateMotion(); queueWebgl(); });
+if (document.readyState === 'complete') queueWebgl();
+else window.addEventListener('load', queueWebgl, { once: true });
+motionButton.hidden = false;
+updateMotion();
+
+async function switchProject(button) {
+  const ticket = ++selection;
+  const { preview: key } = button.dataset;
+  const card = document.getElementById('project-' + key);
+  const nextImage = card.querySelector('img');
+  const demo = card.querySelector('.demo-button');
+  const preloader = new Image();
+  preloader.src = nextImage.src;
+  try { await preloader.decode(); } catch { return; }
+  if (ticket !== selection) return;
+
+  previewAnimation?.revert();
+  previewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  stage.dataset.scene = key;
+  document.querySelector('#preview-name').textContent = button.textContent.trim();
+  document.querySelector('#preview-description').textContent = card.querySelector('.project-content > p').textContent;
+  previewDemo.href = demo.href;
+  previewDemo.target = demo.target;
+  previewDemo.rel = demo.rel;
+  image.src = nextImage.src;
+  image.alt = nextImage.alt;
+  document.dispatchEvent(new CustomEvent('project-selected', { detail: key }));
+  if (motion && canAnimate()) {
+    previewAnimation = motion.from(image, { opacity: .43, scale: 1.045, duration: .45, clearProps: 'transform,opacity' });
+  }
+}
+previewButtons.forEach(button => button.addEventListener('click', () => switchProject(button)));
+
+let screenshotTrigger;
+function enlarge(source, trigger) {
+  screenshotTrigger = trigger;
+  const detail = screenshot.querySelector('img');
+  detail.src = source.currentSrc || source.src;
+  detail.alt = source.alt;
+  screenshot.querySelector('#screenshot-caption').textContent = source.alt;
+  screenshot.showModal();
+  document.body.style.overflow = 'hidden';
+}
+imageButton.addEventListener('click', () => enlarge(image, imageButton));
+document.querySelectorAll('[data-capture]').forEach(button => {
+  button.addEventListener('click', () => enlarge(button.closest('.work-visual').querySelector('img'), button));
+});
+screenshot.addEventListener('close', () => {
+  document.body.style.overflow = '';
+  screenshotTrigger?.focus({ preventScroll: true });
+});
+screenshot.addEventListener('click', event => {
+  if (event.target !== screenshot) return;
+  const box = screenshot.getBoundingClientRect();
+  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) screenshot.close();
+});
+
+const sections = sectionLinks.map(link => document.querySelector(link.hash));
+function updateReading() {
+  pendingScroll = false;
+  const maxScroll = document.documentElement.scrollHeight - innerHeight;
+  const scrolled = maxScroll > 0 ? scrollY / maxScroll : 0;
+  progress.style.transform = 'scaleX(' + Math.max(0, Math.min(1, scrolled)) + ')';
+  topLink.hidden = scrollY < 560;
+  const current = scrolled > .98 ? sections.at(-1) : sections.findLast(section => section.getBoundingClientRect().top <= 170);
+  sectionLinks.forEach(link => {
+    if (link.hash === '#' + current?.id) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+}
+function scheduleReading() {
+  if (pendingScroll) return;
+  pendingScroll = true;
+  requestAnimationFrame(updateReading);
+}
+window.addEventListener('scroll', scheduleReading, { passive: true });
+window.addEventListener('resize', scheduleReading);
+updateReading();
+topLink.addEventListener('click', event => {
+  event.preventDefault();
+  document.querySelector('#inicio').focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: canAnimate() ? 'smooth' : 'instant' });
+});
+document.querySelectorAll('[data-language]').forEach(link => {
+  link.addEventListener('click', () => {
+    const current = sectionLinks.find(item => item.hasAttribute('aria-current'));
+    const next = new URL(link.href);
+    next.hash = current?.hash || location.hash;
+    link.href = next.href;
+  });
+});

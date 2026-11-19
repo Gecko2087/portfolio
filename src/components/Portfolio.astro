@@ -1,0 +1,75 @@
+---
+import '../styles/site.css';
+import content from '../data/content.json';
+import Hero from './Hero.astro';
+import Projects from './Projects.astro';
+import Experience from './Experience.astro';
+import Contact from './Contact.astro';
+const { lang } = Astro.props;
+const en = lang === 'en';
+const data = content[lang];
+const featured = data.projects.find(project => project.key === 'gamerhub');
+const origin = Astro.site.origin;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://lucas-nieto-contacto.portfolio-lucas-nieto.workers.dev; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <title>{data.title}</title>
+    <meta name="description" content={data.description} />
+    <meta property="og:title" content={data.title} />
+    <meta property="og:description" content={data.description} />
+    <meta property="og:image" content={origin + '/project-helpdesk-live.webp'} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={origin + (en ? '/en' : '/')} />
+    <link rel="alternate" hreflang="es" href={origin + '/'} />
+    <link rel="alternate" hreflang="en" href={origin + '/en'} />
+    <link rel="alternate" hreflang="x-default" href={origin + '/'} />
+    <script is:inline src="/theme-init.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{en ? 'Skip to content' : 'Ir al contenido'}</a>
+    <header class="site-header glass">
+      <div class="wrap header-row">
+        <a class="brand" href="#inicio" aria-label="Lucas Nieto">LN <span>/ DEV</span></a>
+        <nav aria-label={en ? 'Main navigation' : 'Navegación principal'}>
+          <a href="#proyectos">{en ? 'Projects' : 'Proyectos'}</a>
+          <a href="#sobre">{en ? 'Experience' : 'Experiencia'}</a>
+          <a href="#contacto">{en ? 'Contact' : 'Contacto'}</a>
+        </nav>
+        <div class="header-controls">
+          <button id="theme-toggle" type="button" aria-label={en ? 'Toggle light theme' : 'Alternar tema claro'} hidden>☼</button>
+          <button id="motion-toggle" type="button" aria-pressed="false" aria-label={en ? 'Pause animations' : 'Pausar animaciones'} hidden>Ⅱ</button>
+          <div class="languages" aria-label={en ? 'Language' : 'Idioma'}>
+            <a href="/" lang="es" data-language aria-current={!en ? 'page' : undefined}>ES</a>
+            <a href="/en.html" lang="en" data-language aria-current={en ? 'page' : undefined}>EN</a>
+          </div>
+        </div>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main">
+      <Hero lang={lang} intro={data.intro} project={featured} projects={data.projects} />
+      <Fragment set:html={data.system} />
+      <Projects lang={lang} projects={data.projects} />
+      <Experience lang={lang} experience={data.experience} />
+      <Contact intro={data.contactIntro} form={data.contactForm} />
+    </main>
+    <footer class="wrap footer"><p>© <span id="year">2026</span> Lucas Nieto</p></footer>
+    <a id="back-to-top" href="#inicio" class="back-to-top" hidden>{en ? 'Back to top' : 'Volver arriba'} ↑</a>
+    <Fragment set:html={data.dialogs} />
+    <script is:inline defer src={en ? '/app-en.js' : '/app.js'}></script>
+    <script is:inline defer src="/contact-config.js"></script>
+    <script is:inline defer src="/contact.js"></script>
+    <script is:inline defer src="/polish.js"></script>
+    <script is:inline defer src="/system-scene.js"></script>
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

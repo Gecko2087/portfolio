@@ -1,0 +1,9 @@
+---
+const { intro, form } = Astro.props;
+---
+<section id="contacto" class="wrap section-space">
+  <div class="contact-panel surface" data-reveal>
+    <Fragment set:html={intro} />
+    <Fragment set:html={form} />
+  </div>
+</section>

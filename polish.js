@@ -1,43 +1,5 @@
 (() => {
   const en = document.documentElement.lang === 'en';
-  const screenshot = document.querySelector('#showcase-image');
-  const trigger = document.querySelector('#expand-screenshot');
-  const dialog = document.querySelector('#screenshot-dialog');
-  const detail = document.querySelector('#screenshot-detail');
-  const caption = document.querySelector('#screenshot-caption');
-
-  if (trigger && screenshot && dialog) {
-  trigger.hidden = false;
-  trigger.addEventListener('click', () => {
-    detail.src = screenshot.currentSrc || screenshot.src;
-    detail.alt = screenshot.alt;
-    caption.textContent = screenshot.alt;
-    dialog.showModal();
-    document.body.style.overflow = 'hidden';
-  });
-  dialog.addEventListener('close', () => {
-    document.body.style.overflow = '';
-    trigger.focus();
-  });
-  dialog.addEventListener('click', event => {
-    if (event.target !== dialog) return;
-    const bounds = dialog.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right ||
-        event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
-  });
-
-  }
-
-  // Language changes retain the section the visitor is reading.
-  document.querySelectorAll('[data-language]').forEach(link => {
-    link.addEventListener('click', () => {
-      const active = document.querySelector('.nav nav a[aria-current="location"]');
-      const destination = new URL(link.href);
-      destination.hash = active?.hash || location.hash;
-      link.href = destination.href;
-    });
-  });
-
   const cases = {
     helpdesk: en
       ? ['The public demo runs on Cloudflare Workers and stores tickets, categories, notes and events in D1. Each visitor has a temporary workspace.',
@@ -74,18 +36,4 @@
     });
   });
 
-  const pause = document.querySelector('#motion-toggle');
-  const media = matchMedia('(prefers-reduced-motion: reduce)');
-  const applyPreference = () => {
-    if (media.matches) document.body.classList.add('motion-paused');
-    pause.disabled = media.matches;
-    const paused = document.body.classList.contains('motion-paused');
-    pause.setAttribute('aria-pressed', String(paused));
-    pause.textContent = paused ? '▷' : 'Ⅱ';
-    pause.setAttribute('aria-label', en
-      ? (paused ? 'Enable animations' : 'Pause animations')
-      : (paused ? 'Activar animaciones' : 'Pausar animaciones'));
-  };
-  media.addEventListener('change', applyPreference);
-  applyPreference();
 })();

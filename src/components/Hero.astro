@@ -1,0 +1,39 @@
+---
+const { lang, project, projects, intro } = Astro.props;
+const en = lang === 'en';
+---
+<section id="inicio" tabindex="-1" class="wrap hero">
+  <div class="hero-copy">
+    <p class="eyebrow" data-hero-motion><span class="status-dot"></span> Full Stack Developer</p>
+    <h1 data-hero-motion>Lucas Nieto</h1>
+    <p class="intro" data-hero-motion>{intro}</p>
+    <div class="mt-7 flex flex-wrap gap-3" data-hero-motion>
+      <a class="action primary" href="#proyectos">{en ? 'View projects' : 'Ver proyectos'} ↓</a>
+      <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} ↗</a>
+    </div>
+  </div>
+  <div class="scene" data-scene={project.key} data-hero-motion>
+    <div class="scene-aura" aria-hidden="true"></div>
+    <div class="scene-canvas" aria-hidden="true"></div>
+    <div class="scene-card glass">
+      <div class="scene-header">
+        <span class="scene-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span id="preview-name">{project.title}</span>
+        <span class="scene-live">{en ? 'Project preview' : 'Vista del proyecto'}</span>
+      </div>
+      <button type="button" class="scene-image" id="hero-image-open" aria-label={en ? 'Enlarge project screenshot' : 'Ampliar captura del proyecto'}>
+        <img id="hero-preview-image" src={'/' + project.image.src} alt={project.image.alt} width="1440" height="900" fetchpriority="high" decoding="async" />
+        <span class="preview-zoom">{en ? 'Enlarge' : 'Ampliar'} ⤢</span>
+      </button>
+      <div class="scene-caption">
+        <span id="preview-description" aria-live="polite">{project.description}</span>
+        <a id="preview-demo" href={project.demo} target="_blank" rel="noopener noreferrer">{en ? 'Try demo' : 'Probar demo'} ↗</a>
+      </div>
+    </div>
+    <div class="scene-controls" role="group" aria-label={en ? 'Choose a project preview' : 'Elige una vista de proyecto'}>
+      {projects.map(item => (
+        <button type="button" data-preview={item.key} aria-pressed={item.key === project.key ? 'true' : 'false'}>{item.title}</button>
+      ))}
+    </div>
+  </div>
+</section>
