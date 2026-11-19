@@ -1,6 +1,7 @@
 (() => {
   const en = document.documentElement.lang === 'en';
   const scene = document.querySelector('.system-scene');
+  if (!scene) return;
   const buttons = [...scene.querySelectorAll('[data-layer]')];
   const description = scene.querySelector('#layer-description');
   const systems = {
@@ -45,12 +46,12 @@
         'Preview changes are local. The demo illustrates the workflow without running Laravel.'],
     },
   };
-  let project = document.querySelector('#showcase').dataset.project || 'helpdesk';
+  let project = scene.dataset.systemProject;
   let layer = 0;
 
   function render(animate) {
     const system = systems[project];
-    scene.dataset.project = project;
+    scene.dataset.systemProject = project;
     scene.querySelector('#system-project').textContent = system.title;
     const keys = ['interface', 'api', 'data'];
     buttons.forEach((button, index) => {
