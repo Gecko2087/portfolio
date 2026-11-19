@@ -1,32 +1,12 @@
-/* Architecture path from the Google Stitch composition. Local UI only. */
 (() => {
- const controls=[...document.querySelectorAll('[data-layer]')];
- const detail=document.querySelector('#architecture-detail');
- if(!detail||!controls.length)return;
  const en=document.documentElement.lang==='en';
- const descriptions=en?{
-  idea:['It starts with a question.','What people need and what the system must solve.'],
-  interface:['An action should feel clear.','States, feedback, keyboard access and responsive interfaces.'],
-  api:['The rules live on the server.','Input validation, permissions and consistent responses.'],
-  data:['A system needs context.','Relationships, persistence and a model that supports the workflow.']
- }:{
-  idea:['Todo empieza con una pregunta.','Qué necesita la persona y qué debe resolver el sistema.'],
-  interface:['Una acción debe sentirse clara.','Estados, respuesta, acceso por teclado e interfaces adaptables.'],
-  api:['Las reglas viven en el servidor.','Validación de entradas, permisos y respuestas consistentes.'],
-  data:['Un sistema necesita contexto.','Relaciones, persistencia y un modelo que acompañe el flujo.']
- };
- controls.forEach((button,index)=>{
-  button.addEventListener('click',()=>{
-   controls.forEach(control=>control.setAttribute('aria-pressed',String(control===button)));
-   const [heading,copy]=descriptions[button.dataset.layer];
-   const strong=document.createElement('strong');strong.textContent=heading;
-   detail.replaceChildren(strong,document.createTextNode(' '+copy));
-  });
-  button.addEventListener('keydown',event=>{
-   if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
-   event.preventDefault();
-   const next=event.key==='Home'?0:event.key==='End'?controls.length-1:(index+(event.key==='ArrowRight'?1:-1)+controls.length)%controls.length;
-   controls[next].focus();controls[next].click();
-  });
- });
+ const toggle=document.querySelector('#motion-toggle'), preference=matchMedia('(prefers-reduced-motion: reduce)');
+ function updateMotion(){if(preference.matches)document.body.classList.add('motion-paused');toggle.disabled=preference.matches;const paused=document.body.classList.contains('motion-paused');toggle.setAttribute('aria-pressed',String(paused));toggle.setAttribute('aria-label',en?(paused?'Enable animations':'Pause animations'):(paused?'Activar animaciones':'Pausar animaciones'));toggle.textContent=paused?'▷':'Ⅱ';}
+ toggle.addEventListener('click',()=>{document.body.classList.toggle('motion-paused');updateMotion();});preference.addEventListener('change',updateMotion);updateMotion();
+ const copy=document.querySelector('#copy-contact'), notice=document.querySelector('#portfolio-notice');let timer;
+ if(navigator.clipboard?.writeText){copy.hidden=false;copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(document.querySelector('.email-link').getAttribute('href').slice(7));notice.textContent=en?'Email address copied.':'Correo copiado.';}catch{notice.textContent=en?'Could not copy. The email is available under Contact.':'No se pudo copiar. El correo está en Contacto.';}clearTimeout(timer);timer=setTimeout(()=>notice.textContent='',5500);});}
+ const top=document.querySelector('#back-to-top'),hero=document.querySelector('.hero'),meter=document.querySelector('.reading-progress');const sections=['inicio','proyectos','sobre','contacto'].map(id=>document.getElementById(id));let scheduled=false;
+ function read(){scheduled=false;top.hidden=hero.getBoundingClientRect().bottom>0;const range=document.documentElement.scrollHeight-innerHeight,progress=range>0?Math.min(1,scrollY/range):0;meter.style.transform=`scaleX(${progress})`;const section=progress>.995?sections.at(-1):sections.findLast(el=>el.getBoundingClientRect().top<=Math.min(innerHeight*.35,240));document.querySelectorAll('.nav nav a[href^="#"]').forEach(a=>{if(a.hash==='#'+section?.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+ function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(read);}}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('load',schedule);read();
+ top.addEventListener('click',event=>{event.preventDefault();hero.focus({preventScroll:true});window.scrollTo({top:0});});
 })();

@@ -6,6 +6,7 @@
   const detail = document.querySelector('#screenshot-detail');
   const caption = document.querySelector('#screenshot-caption');
 
+  if (trigger && screenshot && dialog) {
   trigger.hidden = false;
   trigger.addEventListener('click', () => {
     detail.src = screenshot.currentSrc || screenshot.src;
@@ -24,6 +25,8 @@
     if (event.clientX < bounds.left || event.clientX > bounds.right ||
         event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
   });
+
+  }
 
   // Language changes retain the section the visitor is reading.
   document.querySelectorAll('[data-language]').forEach(link => {
