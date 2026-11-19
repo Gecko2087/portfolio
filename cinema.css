@@ -550,3 +550,103 @@ body.motion-paused .showcase-panel > a { transform: none; }
 .system-scene[data-project="passforge"] { --mint: #c4b5fd; }
 .system-scene[data-project="gamerhub"] { --mint: #d0f498; }
 .system-scene[data-project="taskapi"] { --mint: #ffbf96; }
+
+/* A signed ending, with the same connection motif as the opening. */
+.signature-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem;
+  padding-block: 2.75rem 1.25rem;
+  border-top-color: #42565b;
+  background: radial-gradient(ellipse at 0 0, #24443d33, transparent 60%);
+}
+.footer-identity { display: flex; align-items: center; gap: 1.25rem; }
+.footer-monogram {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: start;
+  gap: .15rem;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 750;
+  letter-spacing: -.1em;
+  line-height: 1;
+  color: #edf5f5;
+}
+.footer-monogram > span { color: var(--mint); font-size: .45em; letter-spacing: 0; padding-top: .15em; }
+.footer-name { color: var(--text); font-size: 1.1rem; font-weight: 650; }
+.footer-identity p + p { font-size: .88rem; max-width: 34ch; margin-top: .25rem; }
+.footer-links { display: flex; flex-wrap: wrap; gap: .35rem 1.4rem; }
+.footer-links a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: #d8e4ea; font-size: .9rem; }
+.footer-links a > span { color: var(--mint); }
+.footer-base {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .25rem 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: .78rem;
+}
+.footer-base > span { font-size: inherit; }
+.footer-base a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; overflow-wrap: anywhere; }
+
+/* Links reveal a line. Buttons lift their surface; keyboard focus remains explicit. */
+.nav nav > a:not(.contact-nav),
+.work-actions :is(a, button),
+.experience-links a,
+.contact-links a,
+.footer-links a,
+.footer-base a,
+.email-link,
+.screenshot-expand {
+  text-decoration: none;
+  background-image: linear-gradient(var(--mint), var(--mint));
+  background-repeat: no-repeat;
+  background-position: left calc(100% - .35rem);
+  background-size: 0 1px;
+}
+:is(.nav nav > a:not(.contact-nav), .work-actions a, .work-actions button,
+.experience-links a, .contact-links a, .footer-links a, .footer-base a,
+.email-link, .screenshot-expand):is(:hover, :focus-visible) {
+  color: var(--mint);
+  background-size: 100% 1px;
+}
+.button, .contact-nav, .contact-intents button, #copy-contact {
+  position: relative;
+}
+.button.primary:is(:hover, :focus-visible) {
+  box-shadow: 0 0 0 3px #b8ffed1c, 0 5px 22px #0005;
+  filter: brightness(1.08);
+}
+.button.secondary:is(:hover, :focus-visible),
+.contact-nav:is(:hover, :focus-visible),
+.contact-intents button:is(:hover, :focus-visible) {
+  background-color: #243535;
+  color: #e6fff8;
+  border-color: var(--mint);
+}
+:is(a, button):focus-visible { outline-width: 2px; outline-offset: 4px; }
+button:disabled { cursor: not-allowed; }
+button:disabled:hover { filter: none; box-shadow: none; translate: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .button, .contact-nav, .contact-intents button {
+    transition: translate .16s ease, background-color .16s ease, border-color .16s ease, box-shadow .16s ease;
+  }
+  .button:not(:disabled):hover, .contact-nav:hover { translate: 0 -2px; }
+  .button:not(:disabled):active, .contact-nav:active { translate: 0 0; box-shadow: none; }
+  .nav nav > a:not(.contact-nav), .work-actions :is(a, button), .experience-links a,
+  .contact-links a, .footer-links a, .footer-base a, .email-link, .screenshot-expand {
+    transition: background-size .22s ease, color .16s ease;
+  }
+  .footer-links a > span { transition: translate .18s ease; }
+  .footer-links a:is(:hover, :focus-visible) > span { translate: 2px -2px; }
+}
+body.motion-paused :is(.button, .contact-nav, .footer-links a > span) { translate: none; }
+@media (max-width: 760px) {
+  .signature-footer { grid-template-columns: 1fr; gap: 1.25rem; padding-top: 2rem; }
+  .footer-links { gap: .5rem 1.5rem; }
+  .footer-base { flex-direction: column; align-items: start; gap: .4rem; }
+}
