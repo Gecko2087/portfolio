@@ -51,7 +51,7 @@
          ['Frontend y API bajo el mismo origen.', 'Sesiones aisladas por visitante con duración de una hora.', 'Catálogo en caché y contador de favoritos compartido entre vistas.'],
          'Crea o cambia de perfil, busca juegos, abre una ficha y agrega o quita favoritos. El backend original con Express y MongoDB continúa en su repositorio.'],
   };
-  document.querySelectorAll('[data-project]').forEach(button => {
+  document.querySelectorAll('button[data-project]').forEach(button => {
     button.addEventListener('click', () => {
       const key = button.dataset.project;
       const updated = cases[key];
