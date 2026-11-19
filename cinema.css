@@ -557,7 +557,7 @@ body.motion-paused .showcase-panel > a { transform: none; }
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 2rem;
-  padding-block: 2.75rem 1.25rem;
+  padding-block: 2.75rem 5rem;
   border-top-color: #42565b;
   background: radial-gradient(ellipse at 0 0, #24443d33, transparent 60%);
 }
@@ -644,9 +644,19 @@ button:disabled:hover { filter: none; box-shadow: none; translate: none; }
   .footer-links a > span { transition: translate .18s ease; }
   .footer-links a:is(:hover, :focus-visible) > span { translate: 2px -2px; }
 }
-body.motion-paused :is(.button, .contact-nav, .footer-links a > span) { translate: none; }
+body.motion-paused .button:not(:disabled):is(:hover, :active),
+body.motion-paused .contact-nav:is(:hover, :active),
+body.motion-paused .footer-links a:is(:hover, :focus-visible) > span {
+  translate: none;
+  transition: none;
+}
 @media (max-width: 760px) {
   .signature-footer { grid-template-columns: 1fr; gap: 1.25rem; padding-top: 2rem; }
   .footer-links { gap: .5rem 1.5rem; }
   .footer-base { flex-direction: column; align-items: start; gap: .4rem; }
+}
+@media (max-width: 420px) {
+  .nav nav { width: 100%; gap: .6rem; justify-content: space-between; }
+  .nav nav > a { min-height: 44px; }
+  .nav .contact-nav { padding-inline: .6rem; }
 }
