@@ -1,12 +1,27 @@
 (() => {
  const en=document.documentElement.lang==='en';
  const toggle=document.querySelector('#motion-toggle'), preference=matchMedia('(prefers-reduced-motion: reduce)');
- function updateMotion(){if(preference.matches)document.body.classList.add('motion-paused');toggle.disabled=preference.matches;const paused=document.body.classList.contains('motion-paused');toggle.setAttribute('aria-pressed',String(paused));toggle.setAttribute('aria-label',en?(paused?'Enable animations':'Pause animations'):(paused?'Activar animaciones':'Pausar animaciones'));toggle.textContent=paused?'▷':'Ⅱ';}
- toggle.addEventListener('click',()=>{document.body.classList.toggle('motion-paused');updateMotion();});preference.addEventListener('change',updateMotion);updateMotion();
+ let motionPaused = false;
+ function updateMotion() {
+   const paused = motionPaused || preference.matches;
+   document.body.classList.toggle('motion-paused', paused);
+   toggle.disabled = preference.matches;
+   toggle.setAttribute('aria-pressed', String(paused));
+   toggle.setAttribute('aria-label', en
+     ? (paused ? 'Enable animations' : 'Pause animations')
+     : (paused ? 'Activar animaciones' : 'Pausar animaciones'));
+   toggle.textContent = paused ? '▷' : 'Ⅱ';
+ }
+ toggle.addEventListener('click', () => {
+   motionPaused = !motionPaused;
+   updateMotion();
+ });
+ preference.addEventListener('change', updateMotion);
+ updateMotion();
  const copy=document.querySelector('#copy-contact'), notice=document.querySelector('#portfolio-notice');let timer;
  if(navigator.clipboard?.writeText){copy.hidden=false;copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(document.querySelector('.email-link').getAttribute('href').slice(7));notice.textContent=en?'Email address copied.':'Correo copiado.';}catch{notice.textContent=en?'Could not copy. The email is available under Contact.':'No se pudo copiar. El correo está en Contacto.';}clearTimeout(timer);timer=setTimeout(()=>notice.textContent='',5500);});}
  const top=document.querySelector('#back-to-top'),hero=document.querySelector('.hero'),meter=document.querySelector('.reading-progress');const sections=['inicio','proyectos','sobre','contacto'].map(id=>document.getElementById(id));let scheduled=false;
  function read(){scheduled=false;top.hidden=hero.getBoundingClientRect().bottom>0;const range=document.documentElement.scrollHeight-innerHeight,progress=range>0?Math.min(1,scrollY/range):0;meter.style.transform=`scaleX(${progress})`;const section=progress>.995?sections.at(-1):sections.findLast(el=>el.getBoundingClientRect().top<=Math.min(innerHeight*.35,240));document.querySelectorAll('.nav nav a[href^="#"]').forEach(a=>{if(a.hash==='#'+section?.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
  function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(read);}}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('load',schedule);read();
- top.addEventListener('click',event=>{event.preventDefault();hero.focus({preventScroll:true});window.scrollTo({top:0});});
+ top.addEventListener('click',event=>{event.preventDefault();hero.focus({preventScroll:true});window.scrollTo({top:0,behavior:document.body.classList.contains('motion-paused')?'instant':'auto'});});
 })();

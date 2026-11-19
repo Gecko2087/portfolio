@@ -11,6 +11,20 @@
   document.dispatchEvent(new CustomEvent('project-selected', { detail: key }));
  }
  buttons.forEach(button=>button.addEventListener('click',()=>select(button.dataset.preview)));
+ const stage = document.querySelector('.product-scene');
+ const motion = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+ stage.addEventListener('pointermove', event => {
+   if (!motion.matches || event.pointerType !== 'mouse' || document.body.classList.contains('motion-paused')) return;
+   const bounds = stage.getBoundingClientRect();
+   const x = (event.clientX - bounds.left) / bounds.width - .5;
+   const y = (event.clientY - bounds.top) / bounds.height - .5;
+   stage.style.setProperty('--preview-pitch', `${-y * 5}deg`);
+   stage.style.setProperty('--preview-yaw', `${x * 7}deg`);
+ }, { passive: true });
+ stage.addEventListener('pointerleave', () => {
+   stage.style.removeProperty('--preview-pitch');
+   stage.style.removeProperty('--preview-yaw');
+ });
  const dialog=document.querySelector('#screenshot-dialog'),detail=document.querySelector('#screenshot-detail'),caption=document.querySelector('#screenshot-caption');let trigger;
  dialog.classList.add('screenshot-view');
  function enlarge(source,button){trigger=button;detail.src=source.currentSrc||source.src;detail.alt=source.alt;caption.textContent=source.alt;dialog.showModal();document.body.style.overflow='hidden';}
