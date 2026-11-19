@@ -364,3 +364,126 @@ body.motion-paused .showcase-panel > a { transform: none; }
   .work-card .work-actions button { text-align: left; }
   .work-card .work-actions a:last-child { grid-column: 2; grid-row: 2; }
 }
+
+/* Reading scale and a spacious two-column project gallery. */
+.wrap { width: min(1280px, calc(100% - 80px)); }
+.nav { height: 88px; }
+.nav nav { font-size: .88rem; gap: 1.6rem; }
+.brand small { font-size: .6rem; letter-spacing: .13em; }
+.hero { padding-top: 2rem; }
+.recruiter-hero { padding-block: 2.6rem 3rem; gap: 3rem; }
+.recruiter-hero h1 { font-size: clamp(3rem, 5.5vw, 5.5rem); letter-spacing: -.065em; }
+.identity-intro { font-size: 1.08rem; line-height: 1.65; }
+.identity-actions .button { font-size: .88rem; padding: .75rem 1.1rem; }
+.showcase { border-radius: 14px; }
+.showcase-panel { grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); padding: 1.6rem; gap: 2rem; }
+.showcase-copy { gap: 1rem; }
+.showcase-copy > p:not(.eyebrow) { font-size: 1rem; }
+.showcase-copy .showcase-stack { font-size: .8rem !important; color: #bdc6d6 !important; }
+.showcase-copy .showcase-boundary { font-size: .8rem !important; color: #b4bed1 !important; }
+.showcase-actions .button { min-height: 44px; font-size: .88rem; }
+.showcase-bottom { font-size: .65rem; }
+.screenshot-expand {
+  display: inline-flex;
+  align-self: start;
+  align-items: center;
+  min-height: 44px;
+  color: var(--mint);
+  padding: 0;
+  font-size: .84rem;
+}
+.screenshot-expand[hidden] { display: none; }
+.project-tabs button { min-height: 44px; font-size: .88rem; }
+.project-tabs button > span { display: none; }
+.work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.work-card { background: linear-gradient(145deg, #121925, #0f131d 70%); }
+.work-copy { padding: 1.5rem; }
+.work-heading h3 { font-size: 1.85rem; }
+.work-copy > p { font-size: 1rem; line-height: 1.65; }
+.work-copy > p.stack { font-size: .83rem; margin-bottom: .6rem; }
+.work-actions { font-size: .9rem; border-top: 1px solid var(--line); }
+.work-image > span { font-size: .65rem; letter-spacing: .08em; padding: .65rem 1.5rem; }
+.section-heading > p, .experience-copy { font-size: 1rem; }
+.selection-foot { font-size: .8rem; line-height: 1.6; }
+.experience-identity .job-title { font-size: 1rem !important; }
+.experience-identity > p:not(.eyebrow), .professional-work { font-size: .95rem; }
+.experience-links, .education { font-size: .88rem; }
+.experience-links a { min-height: 44px; display: inline-flex; align-items: center; }
+.expertise span { font-size: .8rem; }
+.contact-intro > p:not(.eyebrow) { font-size: 1rem; }
+.contact-links { font-size: .9rem; }
+.contact-links a { min-height: 44px; display: inline-flex; align-items: center; }
+.contact-form { font-size: .9rem; gap: 1rem; }
+.contact-form input, .contact-form textarea { font-size: 1rem; min-height: 46px; }
+.contact-intents button { font-size: .82rem; min-height: 44px; }
+.contact-form .button { font-size: .95rem; min-height: 48px; }
+.message-meta, .contact-note, .contact-status { font-size: .78rem; }
+.contact-form label > span { font-size: .75rem; }
+#screenshot-dialog {
+  width: min(1200px, calc(100% - 32px));
+  padding: 1rem;
+}
+#screenshot-dialog form { display: flex; justify-content: end; margin-bottom: .75rem; }
+#screenshot-dialog button { min-height: 44px; padding: .5rem .85rem; border: 1px solid var(--line); border-radius: 6px; }
+#screenshot-detail { width: 100%; height: auto; border-radius: 6px; }
+#screenshot-caption { margin-top: .75rem; color: var(--muted); font-size: .85rem; }
+#case-content h3 { font-size: 1.1rem; }
+#case-content p, #case-content li { font-size: .98rem; line-height: 1.75; }
+#case-content .source-note { font-size: .83rem; }
+
+@media (max-width: 900px) {
+  .wrap { width: calc(100% - 40px); }
+  .showcase-panel { grid-template-columns: minmax(0, 1fr); }
+  .showcase-copy { padding: 0; }
+  .showcase-actions { flex-direction: row; }
+  .showcase-actions .button { flex: 1; }
+}
+@media (max-width: 760px) {
+  .nav { height: auto; }
+  .nav nav { font-size: .84rem; }
+  .nav nav > a { font-size: .84rem; min-height: 36px; display: inline-flex; align-items: center; }
+  .nav nav > a[href^="cv"] { font-size: .84rem; display: inline-flex; }
+  .recruiter-hero { gap: 1.5rem; padding-block: 2rem; }
+  .hero-foot { font-size: .8rem; }
+  .work-copy { padding: 1.2rem; }
+  .work-grid { gap: 1rem; }
+  .contact-form { gap: 1rem; }
+}
+@media (max-width: 640px) {
+  .wrap { width: calc(100% - 32px); }
+  .work-grid { grid-template-columns: minmax(0, 1fr); }
+  .showcase-panel { padding: 1rem; }
+  .showcase-top { padding: .5rem; }
+  .project-tabs { flex-wrap: wrap; justify-content: start; gap: .2rem; }
+  .project-tabs button { font-size: .85rem; padding: .4rem .7rem; }
+  .work-card .work-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .work-card .work-actions a:last-child { grid-column: 2; grid-row: 2; }
+  .work-actions button { text-align: left; }
+  .form-row { grid-template-columns: 1fr; }
+  .selection-foot { align-items: start; }
+}
+
+/* The presentation takes on the selected project's visual identity. */
+.showcase { --project-tone: #94ebd9; --project-tint: #142a2933; }
+.showcase[data-project="passforge"] { --project-tone: #c4b5fd; --project-tint: #49366c33; }
+.showcase[data-project="gamerhub"] { --project-tone: #d0f498; --project-tint: #3d532433; }
+.showcase[data-project="taskapi"] { --project-tone: #ffbf96; --project-tint: #593c2c33; }
+.showcase {
+  background: radial-gradient(ellipse at 100% 0, var(--project-tint), transparent 65%), #0f131d;
+  border-color: color-mix(in srgb, var(--project-tone) 30%, var(--line));
+}
+.showcase-copy h2 > span, .showcase .screenshot-expand { color: var(--project-tone); }
+.showcase .project-tabs [aria-selected="true"] {
+  color: var(--project-tone);
+  background: var(--project-tint);
+  border-color: color-mix(in srgb, var(--project-tone) 40%, transparent);
+}
+.showcase .primary {
+  background: var(--project-tone);
+  color: #10171a;
+  border-color: var(--project-tone);
+}
+.showcase .primary:hover { filter: brightness(1.1); }
+@media (prefers-reduced-motion: no-preference) {
+  .showcase { transition: border-color .25s ease; }
+}
