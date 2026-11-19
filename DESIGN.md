@@ -9,3 +9,5 @@ El código de demostración de Stitch no se ejecuta: se reutilizan el formulario
 
 Reversión: conservar etiqueta rollback-portfolio-20261119. También se puede revertir el commit de aplicación de Stitch sin reescribir historial y volver a desplegar.
 Verificación: 320/390/768/1024/1440 px, ES/EN sin desbordamiento, apertura de los cuatro casos, Escape/foco, conservación de sección al cambiar idioma y formulario con respuesta interceptada (sin enviar correo real).
+
+Revisión de fidelidad: recuperadas las medidas exportadas (portada 72/76 px, títulos de sección 48/56 px, títulos de proyecto 22/28 px, paneles con padding 40 px). Stack en chips antes de la descripción; experiencia en panel completo; contacto dentro de panel compartido; cabecera LN / DEV y CV destacado. Se mantienen capturas reales en lugar de placeholders. Validado en ES/EN y 320–1440 px.
