@@ -26,7 +26,7 @@ let preparingWebgl = false;
 let webglUnavailable = false;
 let motion;
 let motionContext;
-let previewAnimation;
+let previewAnimations = [];
 let selection = 0;
 let pendingScroll = false;
 const canAnimate = () => !motionPreference.matches;
@@ -93,7 +93,7 @@ function updateMotion() {
   if (paused) {
     motionContext?.revert();
     motionContext = undefined;
-    previewAnimation?.revert();
+    clearPreviewMotion();
   } else {
     prepareMotion().catch(() => {});
   }
@@ -114,6 +114,30 @@ if (document.readyState === 'complete') queueWebgl();
 else window.addEventListener('load', queueWebgl, { once: true });
 updateMotion();
 
+function clearPreviewMotion() {
+  previewAnimations.forEach(animation => animation.cancel());
+  previewAnimations = [];
+}
+
+function animateProjectPreview() {
+  if (!canAnimate()) return;
+  const options = { duration: 520, easing: 'cubic-bezier(.21,.8,.27,1)' };
+  previewAnimations = [
+    image.animate([
+      { opacity: .3, transform: 'translateX(22px) scale(1.06)', clipPath: 'inset(0 14% 0 0)' },
+      { opacity: 1, transform: 'none', clipPath: 'inset(0)' },
+    ], options),
+    stage.querySelector('.scene-caption').animate([
+      { opacity: .4, transform: 'translateY(7px)' },
+      { opacity: 1, transform: 'none' },
+    ], { ...options, delay: 55 }),
+    stage.querySelector('.scene-aura').animate([
+      { opacity: .55, transform: 'scale(.86)' },
+      { opacity: 1, transform: 'scale(1)' },
+    ], { ...options, duration: 740 }),
+  ];
+}
+
 async function switchProject(button) {
   const ticket = ++selection;
   const { preview: key } = button.dataset;
@@ -127,7 +151,7 @@ async function switchProject(button) {
   try { await preloader.decode(); } catch { return; }
   if (ticket !== selection) return;
 
-  previewAnimation?.revert();
+  clearPreviewMotion();
   previewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   stage.dataset.scene = key;
   document.querySelector('#preview-name').textContent = button.textContent.trim();
@@ -142,9 +166,7 @@ async function switchProject(button) {
   image.src = nextImage.src;
   image.alt = nextImage.alt;
   document.dispatchEvent(new CustomEvent('project-selected', { detail: key }));
-  if (motion && canAnimate()) {
-    previewAnimation = motion.from(image, { opacity: .43, scale: 1.045, duration: .45, clearProps: 'transform,opacity' });
-  }
+  animateProjectPreview();
 }
 previewButtons.forEach(button => button.addEventListener('click', () => switchProject(button)));
 document.querySelector('.scene-controls').hidden = false;
@@ -157,7 +179,7 @@ triageButtons.forEach(button => button.addEventListener('click', async () => {
   preloader.src = source;
   try { await preloader.decode(); } catch {}
   if (ticket !== selection || stage.dataset.scene !== 'helpdesk') return;
-  previewAnimation?.revert();
+  clearPreviewMotion();
   triageButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   image.src = source;
   image.alt = alt;

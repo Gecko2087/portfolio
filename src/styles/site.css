@@ -320,7 +320,7 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
 
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .34s; }
   html.motion-paused::view-transition-group(*),
   html.motion-paused::view-transition-old(root),
   html.motion-paused::view-transition-new(root) { animation-duration: .001ms; }
@@ -379,4 +379,55 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
   html:not(.motion-paused) .scene-header::after { animation: decision-trace 1.4s ease-out both; }
   html:not(.motion-paused) .project-card .brand-mark { transition: transform .25s ease-out; }
   html:not(.motion-paused) .project-card:is(:hover,:focus-within) .brand-mark { transform: translateY(-2px); }
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+.hero-field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: clip;
+  mask-image: radial-gradient(ellipse at 52% 48%, #000 12%, transparent 72%);
+}
+.hero-field::before {
+  content: '';
+  position: absolute;
+  inset: -8% -12%;
+  background:
+    radial-gradient(ellipse at 30% 40%, var(--halo), transparent 40%),
+    radial-gradient(ellipse at 70% 64%, var(--violet), transparent 40%),
+    repeating-linear-gradient(90deg, transparent 0 47px, color-mix(in srgb, var(--line) 46%, transparent) 47px 48px),
+    repeating-linear-gradient(0deg, transparent 0 47px, color-mix(in srgb, var(--line) 46%, transparent) 47px 48px);
+}
+@keyframes hero-field-arrival {
+  from { opacity: .35; transform: translate(-7%, 6%) scale(.92); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-field::before { animation: hero-field-arrival 4.6s cubic-bezier(.22,.66,.35,1) both; }
+}
+
+.case-navigation { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,220px),1fr)); gap: .8rem; margin-block: 1.7rem .8rem; }
+.case-navigation a { display: grid; grid-template-columns: 1fr auto; gap: .2rem .7rem; padding: .85rem 1rem; }
+.case-navigation a > span:first-child { grid-column: 1 / -1; color: var(--muted); font-size: .75rem; }
+.case-navigation a strong { font-family: var(--font-display); }
+.case-direction { color: var(--accent); }
+.case-navigation a:is(:hover,:focus-visible), .scene-controls button:is(:hover,:focus-visible), .contact-intents button:is(:hover,:focus-visible) { border-color: var(--accent); color: var(--accent); }
+.contact-form :is(input,textarea):focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px var(--halo); }
+@keyframes portfolio-content-enter {
+  from { opacity: .35; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  main { view-transition-name: portfolio-content; }
+  ::view-transition-new(portfolio-content) { animation: portfolio-content-enter .36s ease-out both; }
+  ::view-transition-old(portfolio-content) { animation-duration: .28s; }
+  .case-navigation a, .contact-form :is(input,textarea) { transition: border-color .2s, color .2s, box-shadow .2s; }
+  .case-direction { transition: transform .22s ease-out; }
+  .case-navigation a:is(:hover,:focus-visible)[rel=next] .case-direction { transform: translateX(4px); }
+  .case-navigation a:is(:hover,:focus-visible)[rel=prev] .case-direction { transform: translateX(-4px); }
 }

@@ -1,9 +1,11 @@
 ---
 import '../styles/site.css';
-import { casePath, getCase } from '../data/cases';
+import { caseKeys, casePath, getCase } from '../data/cases';
 const { lang, project } = Astro.props;
 const en = lang === 'en';
 const data = getCase(lang, project);
+const position = caseKeys.indexOf(project);
+const adjacent = [caseKeys[position - 1], caseKeys[position + 1]];
 const home = en ? '/en' : '/';
 const url = (path) => new URL(path, Astro.site).href;
 const title = data.title + ' · Lucas Nieto';
@@ -67,6 +69,15 @@ const title = data.title + ' · Lucas Nieto';
           <p>{data.decision}</p>
         </section>
       </div>
+      <nav class="case-navigation" aria-label={en ? 'Browse project cases' : 'Navegar entre casos'}>
+        {adjacent.map((key, index) => key && (
+          <a class="surface" rel={index ? 'next' : 'prev'} href={casePath(lang, key)}>
+            <span>{index ? (en ? 'Next project' : 'Proyecto siguiente') : (en ? 'Previous project' : 'Proyecto anterior')}</span>
+            <strong>{getCase(lang, key).title}</strong>
+            <span class="case-direction" aria-hidden="true">{index ? '→' : '←'}</span>
+          </a>
+        ))}
+      </nav>
       <a class="text-link" href={home + '#contacto'}>{en ? 'Contact Lucas' : 'Contactar a Lucas'} →</a>
     </main>
     <footer class="wrap footer"><p>© {new Date().getFullYear()} Lucas Nieto</p></footer>
