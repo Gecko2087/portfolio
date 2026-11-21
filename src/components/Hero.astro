@@ -20,13 +20,9 @@ const stages = en ? [
       <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} <span class="link-arrow" aria-hidden="true">→</span></a>
       <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} <span class="link-arrow" aria-hidden="true">↗</span></a>
     </div>
-    <div class="tech-reel" role="group" aria-label={en ? 'Technologies used in my work' : 'Tecnologías que utilizo'}>
-      <div class="tech-track">
-        {[false, true].map(copy => <div class="tech-sequence" aria-hidden={copy ? 'true' : undefined}>
-          {technologies.map(name => <span><BrandMark name={name} />{name}</span>)}
-        </div>)}
-      </div>
-    </div>
+    <ul class="tech-grid" role="list" aria-label={en ? 'Technologies used in my work' : 'Tecnologías que utilizo'}>
+      {technologies.map(name => <li><BrandMark name={name} />{name}</li>)}
+    </ul>
   </div>
   <div class="scene" data-scene={project.key} data-hero-motion>
     <div class="scene-aura" aria-hidden="true"></div>

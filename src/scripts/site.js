@@ -4,7 +4,6 @@ const themePreference = matchMedia('(prefers-color-scheme: light)');
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 const desktop = matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)');
 const themeButton = document.querySelector('#theme-toggle');
-const motionButton = document.querySelector('#motion-toggle');
 const stage = document.querySelector('.scene');
 const image = document.querySelector('#hero-preview-image');
 const imageButton = document.querySelector('#hero-image-open');
@@ -22,7 +21,6 @@ const screenshot = document.querySelector('#screenshot-dialog');
 const sectionLinks = [...document.querySelectorAll('.header-row nav a')];
 const progress = document.querySelector('.reading-progress');
 const topLink = document.querySelector('#back-to-top');
-let pausedByUser = root.classList.contains('motion-paused');
 let webgl;
 let preparingWebgl = false;
 let webglUnavailable = false;
@@ -31,7 +29,7 @@ let motionContext;
 let previewAnimation;
 let selection = 0;
 let pendingScroll = false;
-const canAnimate = () => !pausedByUser && !motionPreference.matches;
+const canAnimate = () => !motionPreference.matches;
 const canRender = () => canAnimate() && desktop.matches && !webglUnavailable;
 
 function updateThemeButton() {
@@ -91,13 +89,7 @@ async function prepareWebgl() {
 function updateMotion() {
   const paused = !canAnimate();
   document.body.classList.toggle('motion-paused', paused);
-  root.classList.toggle('motion-paused', pausedByUser);
-  motionButton.setAttribute('aria-pressed', String(paused));
-  motionButton.setAttribute('aria-label', en
-    ? (paused ? 'Enable animations' : 'Pause animations')
-    : (paused ? 'Activar animaciones' : 'Pausar animaciones'));
-  motionButton.disabled = motionPreference.matches;
-  motionButton.textContent = paused ? '▷' : 'Ⅱ';
+  root.classList.toggle('motion-paused', paused);
   if (paused) {
     motionContext?.revert();
     motionContext = undefined;
@@ -116,17 +108,10 @@ function queueWebgl() {
   if ('requestIdleCallback' in window) requestIdleCallback(prepareWebgl, { timeout: 2000 });
   else setTimeout(prepareWebgl, 250);
 }
-motionButton.addEventListener('click', () => {
-  pausedByUser = !pausedByUser;
-  try { sessionStorage.setItem('portfolio-motion-paused', String(pausedByUser)); } catch {}
-  updateMotion();
-  if (document.readyState === 'complete') queueWebgl();
-});
 motionPreference.addEventListener('change', () => { updateMotion(); queueWebgl(); });
 desktop.addEventListener('change', () => { updateMotion(); queueWebgl(); });
 if (document.readyState === 'complete') queueWebgl();
 else window.addEventListener('load', queueWebgl, { once: true });
-motionButton.hidden = false;
 updateMotion();
 
 async function switchProject(button) {
