@@ -1,4 +1,6 @@
 ---
+import BrandMark from './BrandMark.astro';
+const technologies = ['React', 'TypeScript', 'Vue', 'Laravel', 'Cloudflare Workers', 'Next.js', 'Astro', 'Tailwind CSS'];
 const { lang, project, projects } = Astro.props;
 const en = lang === 'en';
 const stages = en ? [
@@ -17,6 +19,13 @@ const stages = en ? [
     <div class="mt-7 flex flex-wrap gap-3" data-hero-motion>
       <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} <span class="link-arrow" aria-hidden="true">→</span></a>
       <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} <span class="link-arrow" aria-hidden="true">↗</span></a>
+    </div>
+    <div class="tech-reel" role="group" aria-label={en ? 'Technologies used in my work' : 'Tecnologías que utilizo'}>
+      <div class="tech-track">
+        {[false, true].map(copy => <div class="tech-sequence" aria-hidden={copy ? 'true' : undefined}>
+          {technologies.map(name => <span><BrandMark name={name} />{name}</span>)}
+        </div>)}
+      </div>
     </div>
   </div>
   <div class="scene" data-scene={project.key} data-hero-motion>

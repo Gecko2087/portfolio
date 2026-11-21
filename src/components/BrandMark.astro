@@ -1,0 +1,10 @@
+---
+const { name } = Astro.props;
+const icons = {
+  React: 'react', TypeScript: 'typescript', Vue: 'vuejs', Laravel: 'laravel',
+  'Cloudflare Workers': 'cloudflareworkers', D1: 'cloudflare', 'Next.js': 'nextjs',
+  Prisma: 'prisma', 'Better Auth': 'betterauth', Sanctum: 'laravel',
+  Astro: 'astro', 'Tailwind CSS': 'tailwindcss',
+};
+---
+<img class="brand-mark" data-mark={icons[name]} src={'/brands/' + icons[name] + '.svg'} alt="" width="24" height="24" />
