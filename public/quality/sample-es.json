@@ -1,0 +1,32 @@
+{
+  "tickets": [
+    {
+      "id": "Q-01",
+      "subject": "Cargo en disputa",
+      "messages": [
+        { "id": "M-01", "role": "customer", "text": "Es la segunda vez que pregunto por este cargo. Todavía no recibí una solución." },
+        { "id": "M-02", "role": "agent", "text": "Voy a pedirle a Facturación que lo revise." },
+        { "id": "M-02", "role": "agent", "text": "Voy a pedirle a Facturación que lo revise." },
+        { "id": "M-03", "role": "system", "text": "Se cerró el ticket. No quedó seguimiento registrado." }
+      ]
+    },
+    {
+      "id": "Q-02",
+      "subject": "Prueba de inicio de sesión",
+      "messages": [
+        { "id": "M-01", "role": "customer", "text": "Vi «es la segunda vez» en el ejemplo de capacitación." },
+        { "id": "M-02", "role": "agent", "text": "Esa frase es de un ejemplo. ¿Ya puedes ingresar?" },
+        { "id": "M-03", "role": "customer", "text": "Sí. Ya puedo entrar y veo mi cuenta. Quedó resuelto, gracias." }
+      ]
+    },
+    {
+      "id": "Q-03",
+      "subject": "Actualización de correo",
+      "messages": [
+        { "id": "M-01", "role": "customer", "text": "Necesito actualizar mi dirección de correo." },
+        { "id": "M-02", "role": "agent", "text": "Puedes cambiarla desde tu perfil y confirmar el enlace enviado." },
+        { "id": "M-03", "role": "customer", "text": "Listo, ya confirmé el cambio. Gracias." }
+      ]
+    }
+  ]
+}

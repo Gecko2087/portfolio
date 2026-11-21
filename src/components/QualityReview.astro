@@ -2,13 +2,6 @@
 import '../styles/site.css';
 const { lang } = Astro.props;
 const en = lang === 'en';
-const examples = en ? [
-  ['Q-01', 'Disputed charge', 'I’ve asked twice about this charge.', 'I’ll ask Billing to review it.', 'Ticket closed. No follow-up was recorded.', 'A repeat complaint was closed without a resolution.'],
-  ['Q-02', 'Sign-in test', 'I saw “I’ve asked twice” in the training example.', 'That phrase is example text. Can you sign in now?', 'Yes. I can sign in and see my account.', 'The rule matched the phrase “I’ve asked twice”.'],
-] : [
-  ['Q-01', 'Cargo en disputa', 'Es la segunda vez que pregunto por este cargo.', 'Voy a pedirle a Facturación que lo revise.', 'Se cerró el ticket. No quedó seguimiento registrado.', 'Se cerró un reclamo repetido sin resolución.'],
-  ['Q-02', 'Prueba de inicio de sesión', 'Vi «es la segunda vez» en el ejemplo de capacitación.', 'Esa frase es de un ejemplo. ¿Ya puedes ingresar?', 'Sí. Ya puedo entrar y veo mi cuenta.', 'La regla encontró la frase «es la segunda vez».'],
-];
 const home = en ? '/en' : '/';
 const path = en ? '/en/projects/quality-review' : '/proyectos/revision-calidad';
 const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
@@ -20,7 +13,7 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} · Lucas Nieto</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="description" content={en ? 'Review two fictional support conversations and record your quality decisions.' : 'Revisa dos conversaciones ficticias y registra tus decisiones de calidad.'} />
+    <meta name="description" content={en ? 'Run a quality rule on fictional tickets, inspect its evidence and record your review.' : 'Ejecuta una regla sobre tickets ficticios, inspecciona la evidencia y registra tu revisión.'} />
     <link rel="canonical" href={new URL(path, Astro.site)} />
     <link rel="alternate" hreflang="es" href={new URL('/proyectos/revision-calidad', Astro.site)} />
     <link rel="alternate" hreflang="en" href={new URL('/en/projects/quality-review', Astro.site)} />
@@ -38,80 +31,78 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
     <main class="wrap case-page" id="main">
       <a class="text-link case-back" href={home + '#proyectos'}>← {en ? 'Selected projects' : 'Proyectos seleccionados'}</a>
       <div class="case-grid quality-intro">
-        <div><p class="eyebrow">{en ? 'Interactive prototype' : 'Prototipo interactivo'}</p><h1>{title}</h1></div>
-        <p class="intro">{en ? 'Two conversations were flagged for review. Read the evidence, decide which flag warrants follow-up and check the decision log.' : 'Dos conversaciones fueron marcadas para revisión. Lee la evidencia, decide qué alerta merece seguimiento y consulta el historial.'}</p>
+        <div><p class="eyebrow">{en ? 'Interactive demo · rules' : 'Demo interactiva · reglas'}</p><h1>{title}</h1></div>
+        <p class="intro">{en ? 'Inspect the message behind each flag. Decide which case needs follow-up and explain your decision.' : 'Abre el mensaje que activó cada alerta. Decide qué caso merece seguimiento y explica tu decisión.'}</p>
       </div>
-      <p class="quality-note">{en ? 'Fictional conversations and sample rule matches. Your decisions stay in this browser tab.' : 'Conversaciones ficticias y ejemplos de coincidencias por reglas. Tus decisiones quedan en esta pestaña.'}</p>
-      <div class="case-grid case-details quality-grid" data-review>
-        {examples.map(([id, subject, first, second, last, reason]) => (
-          <section class="surface">
-            <p class="eyebrow">{id}</p>
-            <h2>{subject}</h2>
-            <ul class="quality-conversation">
-              <li>{first}</li><li>{second}</li><li>{last}</li>
-            </ul>
-            <p class="quality-reason"><strong>{en ? 'Why it was flagged' : 'Motivo de la alerta'}</strong><br />{reason}</p>
-            <div class="work-actions">
-              <button class="action primary" type="button" data-ticket={id} data-decision="confirm" hidden>{en ? 'Confirm flag' : 'Confirmar alerta'}</button>
-              <button class="action secondary" type="button" data-ticket={id} data-decision="dismiss" hidden>{en ? 'Mark false positive' : 'Marcar falso positivo'}</button>
-            </div>
-          </section>
-        ))}
-      </div>
-      <section class="surface quality-log" data-log hidden>
-        <h2>{en ? 'Decision log' : 'Historial de decisiones'}</h2>
+      <section class="surface qa-import" aria-labelledby="batch-heading">
+        <h2 id="batch-heading">{en ? 'Ticket batch' : 'Lote de tickets'}</h2>
+        <p id="batch-help">{en ? 'Use fictional tickets only. Files and decisions stay in this browser tab.' : 'Usa solo tickets ficticios. Los archivos y las decisiones quedan en esta pestaña.'}</p>
+        <div class="work-actions">
+          <button class="action secondary" type="button" data-sample>{en ? 'Load example batch' : 'Cargar lote de ejemplo'}</button>
+          <a class="text-link" href={en ? '/quality/sample-en.json' : '/quality/sample-es.json'} download>{en ? 'Download example JSON' : 'Descargar JSON de ejemplo'}</a>
+        </div>
+        <label for="quality-file">{en ? 'Import fictional tickets (JSON)' : 'Importar tickets ficticios (JSON)'}</label>
+        <input type="file" id="quality-file" accept=".json,application/json" aria-describedby="batch-help" />
         <p data-feedback role="status"></p>
-        <ol data-entries></ol>
-        <button class="action secondary" type="button" data-reset>{en ? 'Reset decisions' : 'Reiniciar decisiones'}</button>
+        <p data-error role="alert" hidden></p>
       </section>
+      <div class="qa-workbench" data-workbench hidden>
+        <section class="surface qa-queue" aria-labelledby="queue-heading">
+          <h2 id="queue-heading">{en ? 'Review queue' : 'Cola de revisión'}</h2>
+          <p data-summary></p>
+          <ul data-queue></ul>
+        </section>
+        <section class="surface qa-ticket" aria-labelledby="ticket-heading">
+          <h2 id="ticket-heading"></h2>
+          <p data-rule></p>
+          <button class="action secondary" data-evidence type="button">{en ? 'Go to flagged message' : 'Ir al mensaje señalado'}</button>
+          <ol data-messages class="quality-conversation"></ol>
+          <form data-decision-form>
+            <label for="decision">{en ? 'Decision' : 'Decisión'}</label>
+            <select id="decision" name="decision" required>
+              <option value="confirm">{en ? 'Confirm flag' : 'Confirmar alerta'}</option>
+              <option value="dismiss">{en ? 'Mark as false positive' : 'Marcar como falso positivo'}</option>
+              <option value="correct">{en ? 'Correct the flag' : 'Corregir la alerta'}</option>
+            </select>
+            <label for="reason">{en ? 'Reason for your decision' : 'Motivo de la decisión'}</label>
+            <textarea id="reason" name="reason" rows="3" maxlength="400" required></textarea>
+            <button class="action primary" type="submit">{en ? 'Save decision' : 'Guardar decisión'}</button>
+          </form>
+          <p data-decision-feedback role="status"></p>
+          <div data-history>
+            <h3>{en ? 'Decision history' : 'Historial de decisiones'}</h3>
+            <ol data-entries></ol>
+          </div>
+        </section>
+      </div>
       <a class="text-link" href={home + '#contacto'}>{en ? 'Contact Lucas' : 'Contactar a Lucas'} →</a>
     </main>
     <script>
-      const key = 'portfolio-quality-review';
-      const en = document.documentElement.lang === 'en';
-      const log = document.querySelector('[data-log]');
-      const entries = document.querySelector('[data-entries]');
-      const feedback = document.querySelector('[data-feedback]');
-      const buttons = [...document.querySelectorAll('[data-decision]')];
-      const descriptions = en
-        ? { confirm: 'Flag confirmed', dismiss: 'False positive' }
-        : { confirm: 'Alerta confirmada', dismiss: 'Falso positivo' };
-      let decisions = [];
-      try {
-        const stored = JSON.parse(sessionStorage.getItem(key) ?? '[]');
-        if (Array.isArray(stored)) decisions = stored.filter(item => item && buttons.some(button => button.dataset.ticket === item.ticket && button.dataset.decision === item.decision));
-      } catch {}
-      function render() {
-        buttons.forEach(button => {
-          const latest = decisions.findLast(item => item.ticket === button.dataset.ticket);
-          button.setAttribute('aria-pressed', String(latest?.decision === button.dataset.decision));
-        });
-        entries.replaceChildren(...decisions.map(item => {
-          const entry = document.createElement('li');
-          entry.textContent = item.ticket + ' · ' + descriptions[item.decision];
-          return entry;
-        }));
-      }
-      function persist(message) {
-        try { sessionStorage.setItem(key, JSON.stringify(decisions)); } catch {}
-        render();
-        feedback.textContent = message;
-      }
-      buttons.forEach(button => {
-        button.hidden = false;
-        button.addEventListener('click', () => {
-          const { ticket, decision } = button.dataset;
-          if (decisions.findLast(item => item.ticket === ticket)?.decision === decision) return;
-          decisions.push({ ticket, decision });
-          persist(ticket + ' · ' + descriptions[decision]);
-        });
-      });
-      document.querySelector('[data-reset]').addEventListener('click', () => {
-        decisions = [];
-        persist(en ? 'Decisions cleared.' : 'Se borraron las decisiones.');
-      });
-      render();
-      log.hidden = false;
+      import '../scripts/quality-review.js';
     </script>
   </body>
 </html>
+
+<style>
+  .qa-import, .qa-ticket, .qa-queue { padding: clamp(1rem, 3vw, 2rem); }
+  .qa-import { margin-block: 1.5rem; }
+  .qa-workbench h2, .qa-import h2 { font: 700 1.35rem/1.2 var(--font-display); margin-block-end: 0.5rem; }
+  .qa-ticket [data-messages] { display: grid; gap: 0.5rem; }
+  .qa-import label, .qa-ticket label { display: block; margin-block-start: 0.8rem; font-weight: 650; }
+  .qa-import p { margin-block: 0.5rem; }
+  .qa-import input { margin-block: 0.4rem; max-width: 100%; }
+  .qa-import [role="alert"] { font-weight: 700; }
+  .qa-workbench:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 1rem; margin-block: 1.5rem; align-items: start; }
+  .qa-queue ul, .qa-ticket ol { padding-inline-start: 0; list-style: none; }
+  .qa-ticket ol { margin-block: 1rem; }
+  .qa-ticket form:not([hidden]) { display: grid; gap: 0.5rem; }
+  .qa-ticket :is(select, textarea) { padding: 0.65rem; border: 1px solid currentColor; border-radius: 0.5rem; color: inherit; background: var(--surface); font: inherit; }
+  .qa-queue :global(.qa-select) { display: grid; justify-items: start; text-align: start; width: 100%; margin-block: 0.5rem; white-space: normal; overflow-wrap: anywhere; }
+  .qa-queue :global(.qa-select[aria-pressed="true"]) { border-color: var(--accent); background: var(--inset); }
+  .qa-queue :global(.qa-select small) { color: var(--accent); }
+  .qa-ticket :global(li) { overflow-wrap: anywhere; white-space: pre-wrap; }
+  .qa-ticket :global([data-messages] li:focus) { outline: 2px solid var(--accent); outline-offset: 2px; scroll-margin-block: 5rem 1rem; }
+  .qa-ticket :global([data-entries] li) { padding-block: 0.6rem; border-block-start: 1px solid var(--line); }
+  .qa-ticket form button { justify-self: start; }
+  @media (max-width: 720px) { .qa-workbench:not([hidden]) { grid-template-columns: minmax(0, 1fr); } }
+</style>

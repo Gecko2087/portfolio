@@ -1,0 +1,32 @@
+{
+  "tickets": [
+    {
+      "id": "Q-01",
+      "subject": "Disputed charge",
+      "messages": [
+        { "id": "M-01", "role": "customer", "text": "I've asked twice about this charge. I still haven't received a resolution." },
+        { "id": "M-02", "role": "agent", "text": "I'll ask Billing to review it." },
+        { "id": "M-02", "role": "agent", "text": "I'll ask Billing to review it." },
+        { "id": "M-03", "role": "system", "text": "Ticket closed. No follow-up was recorded." }
+      ]
+    },
+    {
+      "id": "Q-02",
+      "subject": "Sign-in test",
+      "messages": [
+        { "id": "M-01", "role": "customer", "text": "I saw “I've asked twice” in the training example." },
+        { "id": "M-02", "role": "agent", "text": "That phrase is example text. Can you sign in now?" },
+        { "id": "M-03", "role": "customer", "text": "Yes. I can sign in and see my account. It's resolved, thank you." }
+      ]
+    },
+    {
+      "id": "Q-03",
+      "subject": "Email address update",
+      "messages": [
+        { "id": "M-01", "role": "customer", "text": "I need to update my email address." },
+        { "id": "M-02", "role": "agent", "text": "You can change it in your profile and confirm the link we send." },
+        { "id": "M-03", "role": "customer", "text": "Done, I've confirmed the change. Thank you." }
+      ]
+    }
+  ]
+}
