@@ -19,8 +19,8 @@ const en = lang === 'en';
           <p class="stack" set:html={project.stack} />
           <div class="work-actions">
             <a class="action primary demo-button" href={project.demo} target={project.demo.startsWith('https:') ? '_blank' : undefined} rel={project.demo.startsWith('https:') ? 'noopener noreferrer' : undefined}>{project.key === 'taskapi' ? (en ? 'Simulated lab' : 'Laboratorio simulado') : (en ? 'Try demo' : 'Probar demo')} ↗</a>
-            <a class="action secondary" href={(en ? '/en/projects/' : '/proyectos/') + project.key}>{en ? 'Case study' : 'Ver caso'}</a>
-            <a class="text-link" href={project.code} target="_blank" rel="noopener noreferrer">{en ? 'Code' : 'Código'} ↗</a>
+            <a class="action secondary" href={(en ? '/en/projects/' : '/proyectos/') + project.key}>{en ? 'Case study' : 'Ver caso'} <span class="link-arrow" aria-hidden="true">→</span></a>
+            <a class="text-link motion-link" href={project.code} target="_blank" rel="noopener noreferrer">{en ? 'Code' : 'Código'} <span class="link-arrow" aria-hidden="true">↗</span></a>
           </div>
         </div>
       </article>

@@ -1,6 +1,13 @@
 ---
 const { lang, project, projects } = Astro.props;
 const en = lang === 'en';
+const stages = en ? [
+  ['before', 'Before review', 'Medium', 'History: sample ticket created.', 'HelpDesk triage with medium impact and urgency and the initial history entry'],
+  ['after', 'After review', 'Critical', 'History: the reviewer recorded that several people were affected.', 'HelpDesk triage with high impact and urgency and the recorded priority change'],
+] : [
+  ['before', 'Antes de revisar', 'Media', 'Historial: ticket ficticio creado.', 'Triaje de HelpDesk con impacto y urgencia medios y el primer registro del historial'],
+  ['after', 'Después de revisar', 'Crítica', 'Historial: el revisor dejó constancia de que había varias personas afectadas.', 'Triaje de HelpDesk con impacto y urgencia altos y el cambio de prioridad registrado'],
+];
 ---
 <section id="inicio" tabindex="-1" class="wrap hero">
   <div class="hero-copy">
@@ -8,8 +15,8 @@ const en = lang === 'en';
     <h1 data-hero-motion>Lucas Nieto</h1>
     <p class="intro" data-hero-motion>{en ? 'I build tools that help teams track incidents, review decisions and see what changed.' : 'Construyo herramientas para que los equipos puedan seguir incidentes, revisar decisiones y saber qué cambió.'}</p>
     <div class="mt-7 flex flex-wrap gap-3" data-hero-motion>
-      <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} →</a>
-      <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} ↗</a>
+      <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} <span class="link-arrow" aria-hidden="true">→</span></a>
+      <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} <span class="link-arrow" aria-hidden="true">↗</span></a>
     </div>
   </div>
   <div class="scene" data-scene={project.key} data-hero-motion>
@@ -19,18 +26,30 @@ const en = lang === 'en';
       <div class="scene-header">
         <span class="scene-dots" aria-hidden="true"><i></i><i></i><i></i></span>
         <span id="preview-name">{project.title}</span>
-        <span class="scene-live">{en ? 'Project preview' : 'Vista del proyecto'}</span>
+        <span class="scene-live" id="preview-label">{en ? 'Recorded walkthrough' : 'Recorrido grabado'}</span>
+      </div>
+      <div class="triage-controls" id="triage-controls" role="group" aria-label={en ? 'Compare triage' : 'Comparar triaje'} hidden>
+        {stages.map(([key, label, priority, history, alt]) => (
+          <button type="button" data-triage={key} data-image={'/project-helpdesk-' + key + '.webp'}
+            data-priority={priority} data-history={history} data-alt={alt} aria-pressed={key === 'before' ? 'true' : 'false'}>
+            {label}
+          </button>
+        ))}
       </div>
       <button type="button" class="scene-image" id="hero-image-open" aria-label={en ? 'Enlarge project screenshot' : 'Ampliar captura del proyecto'}>
-        <img id="hero-preview-image" src={'/' + project.image.src} alt={project.image.alt} width="1440" height="900" fetchpriority="high" decoding="async" />
+        <img id="hero-preview-image" src="/project-helpdesk-before.webp" alt={stages[0][4]} width="952" height="475" fetchpriority="high" decoding="async" />
         <span class="preview-zoom">{en ? 'Enlarge' : 'Ampliar'} ⤢</span>
       </button>
+      <div class="triage-result" id="triage-result" data-state="before" aria-live="polite" aria-atomic="true">
+        <p class="triage-priority">{en ? 'Priority' : 'Prioridad'} <strong>{stages[0][2]}</strong></p>
+        <p class="triage-history">{stages[0][3]}</p>
+      </div>
       <div class="scene-caption">
-        <span id="preview-description" aria-live="polite">{project.description}</span>
-        <a id="preview-demo" href={project.demo} target="_blank" rel="noopener noreferrer">{en ? 'Try demo' : 'Probar demo'} ↗</a>
+        <span id="preview-description" aria-live="polite">{en ? 'Sample printer incident' : 'Incidente ficticio de impresión'}</span>
+        <a class="motion-link" id="preview-demo" href={project.demo} target="_blank" rel="noopener noreferrer">{en ? 'Open demo' : 'Abrir demo'} ↗</a>
       </div>
     </div>
-    <div class="scene-controls" role="group" aria-label={en ? 'Choose a project preview' : 'Elige una vista de proyecto'}>
+    <div class="scene-controls" role="group" aria-label={en ? 'Choose a project preview' : 'Elige una vista de proyecto'} hidden>
       {projects.map(item => (
         <button type="button" data-preview={item.key} aria-pressed={item.key === project.key ? 'true' : 'false'}>{item.title}</button>
       ))}

@@ -291,3 +291,67 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
 @media (max-width: 365px) {
   .scene-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.hero-copy { position: relative; }
+.hero-copy::before {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin-bottom: 22px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.scene-image img { aspect-ratio: 2 / 1; }
+.triage-controls { display: flex; gap: 5px; padding: 5px; margin: 0 12px 10px; background: var(--inset); border: 1px solid var(--line); border-radius: 10px; }
+.triage-controls button { flex: 1; min-height: 44px; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 700; }
+.triage-controls button[aria-pressed="true"] { background: var(--button); color: var(--button-text); }
+.triage-controls button[aria-pressed="false"]:is(:hover, :active) { background: var(--surface); color: var(--accent); }
+.triage-result { display: grid; grid-template-columns: max-content 1fr; align-items: stretch; gap: 10px; padding: 12px; border-bottom: 1px solid var(--line); }
+.triage-result p { min-width: 0; padding: 9px 10px; font-size: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--inset); color: var(--muted); }
+.triage-priority strong { display: block; color: var(--ink); font-family: var(--font-display); font-size: 18px; }
+.triage-result[data-state="after"] :is(.triage-priority, .triage-history) { border-color: var(--accent); }
+.triage-result[data-state="after"] strong { color: var(--accent); }
+.triage-history { display: flex; align-items: center; }
+.scene[data-scene="helpdesk"] .scene-caption { min-height: 58px; }
+.site-header nav a, .motion-link, .text-link, .contact-links a, .email-link {
+  text-decoration-thickness: 1px;
+  text-underline-offset: .35em;
+}
+.site-header nav a:is(:hover, :focus-visible), .contact-links a:is(:hover, :focus-visible) { color: var(--accent); text-decoration-line: underline; }
+:is(.text-link, .motion-link, .email-link):is(:hover, :focus-visible) { text-decoration-thickness: 2px; }
+.text-link .link-arrow { margin-inline-start: .35em; }
+.project-card:focus-within { border-color: var(--accent); }
+.project-card:focus-within .work-actions .secondary, .project-card:hover .work-actions .secondary { border-color: var(--accent); }
+.secondary:is(:hover,:active), .scene-controls button:hover { background: var(--inset); border-color: var(--accent); }
+.action:active { outline: 1px solid currentColor; outline-offset: -4px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+  html.motion-paused::view-transition-group(*),
+  html.motion-paused::view-transition-old(root),
+  html.motion-paused::view-transition-new(root) { animation-duration: .001ms; }
+  html:not(.motion-paused) .triage-result[data-state="after"] .triage-priority { animation: trace-change .36s ease-out; }
+  html:not(.motion-paused) .triage-result[data-state="after"] .triage-history { animation: trace-change .36s .11s ease-out; }
+}
+@keyframes trace-change {
+  0% { background: var(--halo); transform: translateY(4px); }
+  100% { background: var(--inset); transform: translateY(0); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover { border-color: var(--accent); box-shadow: 0 14px 40px -25px var(--shadow); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:not(.motion-paused) :is(.project-card, .work-image img, .link-arrow) { transition: transform .22s ease-out, border-color .18s, box-shadow .18s; }
+  html:not(.motion-paused) .site-header nav a {
+    background: linear-gradient(currentColor, currentColor) no-repeat left 78% / 0 2px;
+    transition: background-size .18s ease-out, color .15s ease-out;
+  }
+  html:not(.motion-paused) .site-header nav a:is(:hover, :focus-visible, [aria-current]) {
+    background-size: 100% 2px;
+    text-decoration-line: none;
+  }
+  html:not(.motion-paused) .project-card:is(:hover, :focus-within) .work-image img { transform: scale(1.025); }
+  html:not(.motion-paused) :is(a:hover, a:focus-visible) .link-arrow { transform: translateX(3px); }
+}

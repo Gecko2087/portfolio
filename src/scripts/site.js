@@ -10,11 +10,19 @@ const image = document.querySelector('#hero-preview-image');
 const imageButton = document.querySelector('#hero-image-open');
 const previewDemo = document.querySelector('#preview-demo');
 const previewButtons = [...document.querySelectorAll('[data-preview]')];
+const triageControls = document.querySelector('#triage-controls');
+const triageResult = document.querySelector('#triage-result');
+const triageButtons = [...triageControls.querySelectorAll('[data-triage]')];
+const previewLabel = document.querySelector('#preview-label');
+const previewDescription = document.querySelector('#preview-description');
+const introDemoLabel = previewDemo.textContent.trim();
+const triageDescription = previewDescription.textContent;
+const walkthroughLabel = previewLabel.textContent;
 const screenshot = document.querySelector('#screenshot-dialog');
 const sectionLinks = [...document.querySelectorAll('.header-row nav a')];
 const progress = document.querySelector('.reading-progress');
 const topLink = document.querySelector('#back-to-top');
-let pausedByUser = false;
+let pausedByUser = root.classList.contains('motion-paused');
 let webgl;
 let preparingWebgl = false;
 let webglUnavailable = false;
@@ -83,6 +91,7 @@ async function prepareWebgl() {
 function updateMotion() {
   const paused = !canAnimate();
   document.body.classList.toggle('motion-paused', paused);
+  root.classList.toggle('motion-paused', pausedByUser);
   motionButton.setAttribute('aria-pressed', String(paused));
   motionButton.setAttribute('aria-label', en
     ? (paused ? 'Enable animations' : 'Pause animations')
@@ -109,6 +118,7 @@ function queueWebgl() {
 }
 motionButton.addEventListener('click', () => {
   pausedByUser = !pausedByUser;
+  try { sessionStorage.setItem('portfolio-motion-paused', String(pausedByUser)); } catch {}
   updateMotion();
   if (document.readyState === 'complete') queueWebgl();
 });
@@ -123,8 +133,10 @@ async function switchProject(button) {
   const ticket = ++selection;
   const { preview: key } = button.dataset;
   const card = document.getElementById('project-' + key);
-  const nextImage = card.querySelector('img');
   const demo = card.querySelector('.demo-button');
+  const isHelpdesk = key === 'helpdesk';
+  const stageButton = triageButtons.find(item => item.getAttribute('aria-pressed') === 'true');
+  const nextImage = isHelpdesk ? { src: stageButton.dataset.image, alt: stageButton.dataset.alt } : card.querySelector('img');
   const preloader = new Image();
   preloader.src = nextImage.src;
   try { await preloader.decode(); } catch { return; }
@@ -134,11 +146,14 @@ async function switchProject(button) {
   previewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   stage.dataset.scene = key;
   document.querySelector('#preview-name').textContent = button.textContent.trim();
-  document.querySelector('#preview-description').textContent = card.querySelector('.project-content > p').textContent;
+  triageControls.hidden = !isHelpdesk;
+  triageResult.hidden = !isHelpdesk;
+  previewLabel.textContent = isHelpdesk ? walkthroughLabel : en ? 'Project preview' : 'Vista del proyecto';
+  previewDescription.textContent = isHelpdesk ? triageDescription : card.querySelector('.project-content > p').textContent;
   previewDemo.href = demo.href;
   previewDemo.target = demo.target;
   previewDemo.rel = demo.rel;
-  previewDemo.textContent = demo.textContent.trim();
+  previewDemo.textContent = isHelpdesk ? introDemoLabel : demo.textContent.trim();
   image.src = nextImage.src;
   image.alt = nextImage.alt;
   document.dispatchEvent(new CustomEvent('project-selected', { detail: key }));
@@ -147,6 +162,25 @@ async function switchProject(button) {
   }
 }
 previewButtons.forEach(button => button.addEventListener('click', () => switchProject(button)));
+document.querySelector('.scene-controls').hidden = false;
+
+triageButtons.forEach(button => button.addEventListener('click', async () => {
+  const ticket = ++selection;
+  if (button.getAttribute('aria-pressed') === 'true') return;
+  const { image: source, alt, priority, history, triage: state } = button.dataset;
+  const preloader = new Image();
+  preloader.src = source;
+  try { await preloader.decode(); } catch {}
+  if (ticket !== selection || stage.dataset.scene !== 'helpdesk') return;
+  previewAnimation?.revert();
+  triageButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  image.src = source;
+  image.alt = alt;
+  triageResult.querySelector('strong').textContent = priority;
+  triageResult.querySelector('.triage-history').textContent = history;
+  triageResult.dataset.state = state;
+}));
+triageControls.hidden = false;
 
 let screenshotTrigger;
 function enlarge(source, trigger) {
