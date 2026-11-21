@@ -406,16 +406,16 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
 /* Let the light move through the name while its baseline stays still. */
 .signature-name { display: inline-block; padding-inline-end: .035em; }
 @keyframes signature-light {
-  from { background-position: 100% 50%; }
-  to { background-position: 0% 50%; }
+  0% { background-position: 94% 50%; }
+  65%, 100% { background-position: 6% 50%; }
 }
 @keyframes field-drift {
-  from { transform: translate(-3%, 3%) rotate(-1.2deg); }
-  to { transform: translate(3%, -3%) rotate(1.2deg); }
+  from { transform: translate(-6%, 4%) rotate(-2.5deg); }
+  to { transform: translate(6%, -4%) rotate(2.5deg); }
 }
 @keyframes field-light {
-  from { transform: translate(-18%, 8%) rotate(-12deg); }
-  to { transform: translate(20%, -8%) rotate(6deg); }
+  from { transform: translate(-28%, 12%) rotate(-15deg); }
+  to { transform: translate(28%, -12%) rotate(12deg); }
 }
 @keyframes preview-float {
   from { translate: 0 2px; }
@@ -429,10 +429,10 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
   @supports (background-clip: text) {
     .signature-name {
       color: transparent;
-      background-image: linear-gradient(108deg, var(--ink) 20%, var(--accent) 43%, var(--ink) 50%, var(--accent) 55%, var(--ink) 78%);
-      background-size: 245% 100%;
+      background-image: linear-gradient(108deg, var(--ink) 18%, var(--ink) 32%, var(--accent) 46%, var(--accent) 55%, var(--ink) 73%);
+      background-size: 205% 100%;
       background-clip: text;
-      animation: signature-light 4.2s ease-in-out infinite alternate;
+      animation: signature-light 3.2s ease-in-out infinite alternate;
     }
   }
   .hero-field::before { animation: field-drift 11s ease-in-out infinite alternate; }
@@ -441,7 +441,7 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
     pointer-events: none;
     position: absolute;
     inset: 0 12%;
-    background: radial-gradient(ellipse at center, color-mix(in srgb,var(--accent) 20%,transparent), transparent 63%);
+    background: radial-gradient(ellipse at center, color-mix(in srgb,var(--accent) 33%,transparent), transparent 65%);
     animation: field-light 8s ease-in-out infinite alternate;
   }
   .scene-image img { scale: 1.035; animation: preview-float 4s ease-in-out infinite alternate; }
