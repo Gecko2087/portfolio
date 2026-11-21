@@ -434,7 +434,17 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
   from { clip-path: inset(4% 4% 4% 4% round 12px); scale: .97; }
   to { clip-path: inset(0 round 0px); scale: 1; }
 }
-@media (prefers-reduced-motion: no-preference) {
+.hero-motion-choice {
+  min-height: 44px;
+  margin-top: .45rem;
+  color: var(--accent);
+  font-size: .8rem;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+.hero-motion-choice[aria-pressed="true"] { font-weight: 700; }
+
+.hero[data-ambient-motion] {
   .signature-name > span { animation: signature-arrival .72s cubic-bezier(.2,.72,.22,1) both; }
   .signature-name > span + span { animation-delay: .13s; }
   .signature-name::after {
@@ -471,12 +481,14 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
   }
   .scene-image img { scale: 1.035; animation: preview-float 4s ease-in-out infinite alternate; }
   .scene-card:is(:hover,:focus-within) .scene-image img { animation-play-state: paused; }
+  &[data-motion-idle] :is(.signature-name > span,.scene-image img),
+  &[data-motion-idle] .signature-name::after,
+  &[data-motion-idle] .hero-signals,
+  &[data-motion-idle] .hero-field::before,
+  &[data-motion-idle] .hero-field::after { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: no-preference) {
   .capture-entered { animation: capture-arrival .8s cubic-bezier(.2,.75,.28,1) both; }
-  .hero[data-motion-idle] :is(.signature-name,.scene-image img),
-  .hero[data-motion-idle] .signature-name::after,
-  .hero[data-motion-idle] .hero-signals,
-  .hero[data-motion-idle] .hero-field::before,
-  .hero[data-motion-idle] .hero-field::after { animation-play-state: paused; }
 }
 @media (forced-colors: active) {
   .signature-name::after, .hero-signals { display: none; }

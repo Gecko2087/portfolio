@@ -27,6 +27,25 @@ let webglUnavailable = false;
 let motion;
 let motionContext;
 const hero = stage.closest('.hero');
+const heroMotionChoice = document.querySelector('#hero-motion-choice');
+const heroMotionKey = 'portfolio-cover-motion';
+let heroMotionOptIn = false;
+try { heroMotionOptIn = sessionStorage.getItem(heroMotionKey) === 'on'; } catch {}
+
+function updateHeroMotionChoice() {
+  heroMotionChoice.hidden = !motionPreference.matches;
+  heroMotionChoice.setAttribute('aria-pressed', String(heroMotionOptIn));
+  hero.toggleAttribute('data-ambient-motion', !motionPreference.matches || heroMotionOptIn);
+}
+
+heroMotionChoice.addEventListener('click', () => {
+  heroMotionOptIn = !heroMotionOptIn;
+  try { sessionStorage.setItem(heroMotionKey, heroMotionOptIn ? 'on' : 'off'); } catch {}
+  updateHeroMotionChoice();
+});
+motionPreference.addEventListener('change', updateHeroMotionChoice);
+updateHeroMotionChoice();
+
 let heroVisible = true;
 function updateAmbientMotion() {
   hero.toggleAttribute('data-motion-idle', !heroVisible || document.hidden);

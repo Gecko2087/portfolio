@@ -21,6 +21,7 @@ const stages = en ? [
       <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} <span class="link-arrow" aria-hidden="true">→</span></a>
       <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} <span class="link-arrow" aria-hidden="true">↗</span></a>
     </div>
+    <button hidden type="button" id="hero-motion-choice" class="hero-motion-choice" aria-pressed="false">{en ? 'Animate this cover' : 'Animar esta portada'}</button>
     <ul class="tech-grid" role="list" aria-label={en ? 'Technologies used in my work' : 'Tecnologías que utilizo'}>
       {technologies.map(name => <li><BrandMark name={name} />{name}</li>)}
     </ul>
