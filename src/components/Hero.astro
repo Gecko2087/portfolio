@@ -12,10 +12,10 @@ const stages = en ? [
 ];
 ---
 <section id="inicio" tabindex="-1" class="wrap hero">
-  <div class="hero-field" aria-hidden="true"></div>
+  <div class="hero-field" aria-hidden="true"><span class="hero-signals"></span></div>
   <div class="hero-copy">
     <p class="eyebrow" data-hero-motion><span class="status-dot"></span> Full Stack Developer</p>
-    <h1 data-hero-motion><span class="signature-name">Lucas Nieto</span></h1>
+    <h1 data-hero-motion><span class="signature-name"><span>Lucas</span> <span>Nieto</span></span></h1>
     <p class="intro" data-hero-motion>{en ? 'I build tools that help teams track incidents, review decisions and see what changed.' : 'Construyo herramientas para que los equipos puedan seguir incidentes, revisar decisiones y saber qué cambió.'}</p>
     <div class="mt-7 flex flex-wrap gap-3" data-hero-motion>
       <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} <span class="link-arrow" aria-hidden="true">→</span></a>
