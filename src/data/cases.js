@@ -2,8 +2,14 @@ import content from './content.json';
 
 const cases = {
   helpdesk: {
-    es: ['De un incidente a un historial verificable', 'Construí una mesa de ayuda para registrar incidentes, revisar el análisis sugerido y dar seguimiento a la resolución.', 'Cada visitante obtiene un espacio temporal. Cloudflare Workers valida la sesión y D1 guarda el estado y su evento en una sola operación.', ['Abre la demo y entra en Tickets.', 'Abre «Impresora de prueba no responde» y cambia el estado.', 'Reabre el ticket y comprueba que el cambio aparece en el historial.'], 'El análisis muestra el proveedor que respondió. La demo puede usar reglas locales.'],
-    en: ['From a support incident to an audit trail', 'I built a help desk to log incidents, review suggested analyses and track their resolution.', 'Each visitor gets a temporary workspace. Cloudflare Workers checks the session and D1 saves the state change and its event together.', ['Open the demo and go to Tickets.', 'Open the sample printer ticket and change its status.', 'Reopen the ticket and check that the change appears in its activity log.'], 'Each analysis identifies its provider. The demo can use local rules.'],
+    es: ['De un incidente a un historial verificable', 'Construí una mesa de ayuda para registrar incidentes y revisar su triaje. Cada corrección de impacto o urgencia deja un motivo visible en el historial.', 'Cloudflare Workers valida el espacio temporal de cada visitante. D1 guarda la prioridad recalculada y su evento en una sola operación. Repetir los mismos valores evita duplicar el evento.', ['Abre la demo y entra en Tickets.', 'Abre «Impresora de prueba no responde». En «Revisar triaje», cambia impacto y urgencia a Alto y escribe un motivo ficticio.', 'Guarda el triaje. La prioridad pasa de Media a Crítica y el historial conserva el motivo tras recargar.'], 'El análisis muestra el proveedor que respondió. El recorrido de triaje funciona con datos ficticios.'],
+    en: ['From a support incident to an audit trail', 'I built a help desk for logging incidents and reviewing triage decisions. Changes to impact or urgency leave a reason in the activity log.', 'Cloudflare Workers checks each visitor’s temporary workspace. D1 saves the recalculated priority and its event together. Submitting the same values again avoids a duplicate event.', ['Open the demo and go to Tickets.', 'Open «Impresora de prueba no responde». Under «Revisar triaje», set impact and urgency to Alto (High) and enter a fictional reason.', 'Select «Guardar triaje». The priority changes from Medium to Critical, and the activity log retains your reason after reload.'], 'Each analysis identifies its provider. The triage walkthrough uses fictional data.'],
+    code: 'https://github.com/Gecko2087/helpdesk-ia/tree/migrar-demo-cloudflare',
+    image: {
+      src: 'project-helpdesk-triage.webp', width: 952, height: 475,
+      es: 'Detalle de HelpDesk IA con los controles de triaje y su cambio de prioridad registrado',
+      en: 'HelpDesk IA ticket detail showing triage controls and the recorded priority change',
+    },
   },
   gamerhub: {
     es: ['Un catálogo, favoritos por perfil', 'Construí una aplicación para explorar el catálogo de FreeToGame y guardar una lista de juegos por perfil.', 'La demo separa la sesión temporal del visitante y los favoritos de cada perfil. El catálogo se consulta mediante la API del servidor.', ['Entra como visitante.', 'Busca un juego y añádelo a favoritos.', 'Cambia de perfil y vuelve al anterior para comprobar la lista.'], 'El catálogo usa datos de FreeToGame. Los perfiles de la demo son temporales.'],
@@ -25,6 +31,9 @@ export const casePath = (lang, key) => (lang === 'en' ? '/en/projects/' : '/proy
 
 export function getCase(lang, key) {
   const project = content[lang].projects.find(item => item.key === key);
+  const { code, image, backend } = cases[key];
   const [headline, intro, decision, steps, mode] = cases[key][lang];
-  return { ...project, headline, intro, decision, steps, mode, backend: cases[key].backend };
+  return { ...project, headline, intro, decision, steps, mode, backend, code: code ?? project.code,
+    image: image ? { src: image.src, width: image.width, height: image.height, alt: image[lang] } : project.image,
+  };
 }
