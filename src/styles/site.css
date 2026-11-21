@@ -403,12 +403,56 @@ html:has(body.motion-paused) { scroll-behavior: auto; }
     repeating-linear-gradient(90deg, transparent 0 47px, color-mix(in srgb, var(--line) 46%, transparent) 47px 48px),
     repeating-linear-gradient(0deg, transparent 0 47px, color-mix(in srgb, var(--line) 46%, transparent) 47px 48px);
 }
-@keyframes hero-field-arrival {
-  from { opacity: .35; transform: translate(-7%, 6%) scale(.92); }
-  to { opacity: 1; transform: none; }
+/* Let the light move through the name while its baseline stays still. */
+.signature-name { display: inline-block; padding-inline-end: .035em; }
+@keyframes signature-light {
+  from { background-position: 100% 50%; }
+  to { background-position: 0% 50%; }
+}
+@keyframes field-drift {
+  from { transform: translate(-3%, 3%) rotate(-1.2deg); }
+  to { transform: translate(3%, -3%) rotate(1.2deg); }
+}
+@keyframes field-light {
+  from { transform: translate(-18%, 8%) rotate(-12deg); }
+  to { transform: translate(20%, -8%) rotate(6deg); }
+}
+@keyframes preview-float {
+  from { translate: 0 2px; }
+  to { translate: 0 -2px; }
+}
+@keyframes capture-arrival {
+  from { clip-path: inset(4% 4% 4% 4% round 12px); scale: .97; }
+  to { clip-path: inset(0 round 0px); scale: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-field::before { animation: hero-field-arrival 4.6s cubic-bezier(.22,.66,.35,1) both; }
+  @supports (background-clip: text) {
+    .signature-name {
+      color: transparent;
+      background-image: linear-gradient(108deg, var(--ink) 20%, var(--accent) 43%, var(--ink) 50%, var(--accent) 55%, var(--ink) 78%);
+      background-size: 245% 100%;
+      background-clip: text;
+      animation: signature-light 4.2s ease-in-out infinite alternate;
+    }
+  }
+  .hero-field::before { animation: field-drift 11s ease-in-out infinite alternate; }
+  .hero-field::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0 12%;
+    background: radial-gradient(ellipse at center, color-mix(in srgb,var(--accent) 20%,transparent), transparent 63%);
+    animation: field-light 8s ease-in-out infinite alternate;
+  }
+  .scene-image img { scale: 1.035; animation: preview-float 4s ease-in-out infinite alternate; }
+  .scene-card:is(:hover,:focus-within) .scene-image img { animation-play-state: paused; }
+  .capture-entered { animation: capture-arrival .8s cubic-bezier(.2,.75,.28,1) both; }
+  .hero[data-motion-idle] :is(.signature-name,.scene-image img),
+  .hero[data-motion-idle] .hero-field::before,
+  .hero[data-motion-idle] .hero-field::after { animation-play-state: paused; }
+}
+@media (forced-colors: active) {
+  .signature-name { color: CanvasText; background: none; animation: none; }
 }
 
 .case-navigation { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,220px),1fr)); gap: .8rem; margin-block: 1.7rem .8rem; }

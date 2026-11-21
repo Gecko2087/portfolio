@@ -26,6 +26,18 @@ let preparingWebgl = false;
 let webglUnavailable = false;
 let motion;
 let motionContext;
+const hero = stage.closest('.hero');
+let heroVisible = true;
+function updateAmbientMotion() {
+  hero.toggleAttribute('data-motion-idle', !heroVisible || document.hidden);
+}
+new IntersectionObserver(([entry]) => {
+  heroVisible = entry.isIntersecting;
+  updateAmbientMotion();
+}).observe(hero);
+document.addEventListener('visibilitychange', updateAmbientMotion);
+updateAmbientMotion();
+
 let previewAnimations = [];
 let selection = 0;
 let pendingScroll = false;
