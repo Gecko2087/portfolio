@@ -3,13 +3,17 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 
 const root = path.resolve('dist');
-for (const name of readdirSync(root).filter(name => name.endsWith('.html'))) {
+for (const name of readdirSync(root, { recursive: true }).filter(name => name.endsWith('.html'))) {
   const html = readFileSync(path.join(root, name), 'utf8');
   const ids = new Set([...html.matchAll(/id="([^"]+)"/g)].map(match => match[1]));
   for (const [, ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
     assert(!/^javascript:/i.test(ref), `Enlace inseguro en ${name}`);
     if (ref.startsWith('#')) assert(ids.has(ref.slice(1)), `Ancla ausente: ${name} ${ref}`);
-    else if (!/^(https?:|mailto:|data:)/.test(ref)) assert(existsSync(path.join(root, ref.split(/[?#]/)[0].replace(/^\//, ''))), `Recurso ausente: ${ref}`);
+    else if (!/^(https?:|mailto:|data:)/.test(ref)) {
+      const route = ref.split(/[?#]/)[0];
+      const target = route.startsWith('/') ? path.join(root, route) : path.join(root, path.dirname(name), route);
+      assert([target, target + '.html', path.join(target, 'index.html')].some(candidate => existsSync(candidate)), `Recurso ausente: ${name} ${ref}`);
+    }
   }
 }
 for (const [name, lang] of [['index.html','es'],['en.html','en'],['cv.html','es'],['cv-en.html','en']]) {

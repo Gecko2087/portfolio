@@ -138,6 +138,7 @@ async function switchProject(button) {
   previewDemo.href = demo.href;
   previewDemo.target = demo.target;
   previewDemo.rel = demo.rel;
+  previewDemo.textContent = demo.textContent.trim();
   image.src = nextImage.src;
   image.alt = nextImage.alt;
   document.dispatchEvent(new CustomEvent('project-selected', { detail: key }));

@@ -1,14 +1,14 @@
 ---
-const { lang, project, projects, intro } = Astro.props;
+const { lang, project, projects } = Astro.props;
 const en = lang === 'en';
 ---
 <section id="inicio" tabindex="-1" class="wrap hero">
   <div class="hero-copy">
     <p class="eyebrow" data-hero-motion><span class="status-dot"></span> Full Stack Developer</p>
     <h1 data-hero-motion>Lucas Nieto</h1>
-    <p class="intro" data-hero-motion>{intro}</p>
+    <p class="intro" data-hero-motion>{en ? 'I build tools that help teams track incidents, review decisions and see what changed.' : 'Construyo herramientas para que los equipos puedan seguir incidentes, revisar decisiones y saber qué cambió.'}</p>
     <div class="mt-7 flex flex-wrap gap-3" data-hero-motion>
-      <a class="action primary" href="#proyectos">{en ? 'View projects' : 'Ver proyectos'} ↓</a>
+      <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} →</a>
       <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} ↗</a>
     </div>
   </div>

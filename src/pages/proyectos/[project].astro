@@ -1,0 +1,9 @@
+---
+import CaseStudy from '../../components/CaseStudy.astro';
+import { caseKeys } from '../../data/cases';
+export function getStaticPaths() {
+  return caseKeys.map(project => ({ params: { project } }));
+}
+const { project } = Astro.params;
+---
+<CaseStudy lang="es" project={project} />

@@ -8,7 +8,7 @@ import Contact from './Contact.astro';
 const { lang } = Astro.props;
 const en = lang === 'en';
 const data = content[lang];
-const featured = data.projects.find(project => project.key === 'gamerhub');
+const featured = data.projects.find(project => project.key === 'helpdesk');
 const origin = Astro.site.origin;
 ---
 <!doctype html>
@@ -22,7 +22,7 @@ const origin = Astro.site.origin;
     <meta name="description" content={data.description} />
     <meta property="og:title" content={data.title} />
     <meta property="og:description" content={data.description} />
-    <meta property="og:image" content={origin + '/project-helpdesk-live.webp'} />
+    <meta property="og:image" content={origin + (en ? '/portfolio-social-en.png' : '/portfolio-social.png')} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -47,27 +47,27 @@ const origin = Astro.site.origin;
           <button id="motion-toggle" type="button" aria-pressed="false" aria-label={en ? 'Pause animations' : 'Pausar animaciones'} hidden>Ⅱ</button>
           <div class="languages" aria-label={en ? 'Language' : 'Idioma'}>
             <a href="/" lang="es" data-language aria-current={!en ? 'page' : undefined}>ES</a>
-            <a href="/en.html" lang="en" data-language aria-current={en ? 'page' : undefined}>EN</a>
+            <a href="/en" lang="en" data-language aria-current={en ? 'page' : undefined}>EN</a>
           </div>
         </div>
       </div>
       <div class="reading-progress" aria-hidden="true"></div>
     </header>
     <main id="main">
-      <Hero lang={lang} intro={data.intro} project={featured} projects={data.projects} />
-      <Fragment set:html={data.system} />
+      <Hero lang={lang} project={featured} projects={data.projects} />
       <Projects lang={lang} projects={data.projects} />
       <Experience lang={lang} experience={data.experience} />
       <Contact intro={data.contactIntro} form={data.contactForm} />
     </main>
-    <footer class="wrap footer"><p>© <span id="year">2026</span> Lucas Nieto</p></footer>
+    <footer class="wrap footer"><p>© {new Date().getFullYear()} Lucas Nieto</p></footer>
     <a id="back-to-top" href="#inicio" class="back-to-top" hidden>{en ? 'Back to top' : 'Volver arriba'} ↑</a>
-    <Fragment set:html={data.dialogs} />
-    <script is:inline defer src={en ? '/app-en.js' : '/app.js'}></script>
+    <dialog aria-label={en ? 'Project screenshot' : 'Captura del proyecto'} id="screenshot-dialog">
+      <form method="dialog"><button>{en ? 'Close image' : 'Cerrar imagen'} ×</button></form>
+      <img alt="" height="900" width="1440" />
+      <p id="screenshot-caption"></p>
+    </dialog>
     <script is:inline defer src="/contact-config.js"></script>
     <script is:inline defer src="/contact.js"></script>
-    <script is:inline defer src="/polish.js"></script>
-    <script is:inline defer src="/system-scene.js"></script>
     <script>
       import '../scripts/site';
     </script>
