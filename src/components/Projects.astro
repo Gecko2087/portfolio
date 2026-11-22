@@ -4,13 +4,13 @@ import { channelsPaths, channelsTitles } from '../data/contact-channels.js';
 const { lang, projects } = Astro.props;
 const en = lang === 'en';
 const operations = en ? [
-  { title: 'Operations intranet', detail: 'Trace a call assessment back to the exact excerpt a reviewer needs to check.', href: '/en/projects/operations-intranet', cta: 'See call evidence' },
-  { title: 'Ticket quality review', detail: 'Review three fictional tickets and decide whether the flagged message warrants follow-up.', href: '/en/projects/quality-review', cta: 'Open the review queue' },
-  { title: 'Service recovery', detail: 'See how a backup was restored and checked in a reproducible exercise.', href: '/en/projects/service-recovery', cta: 'See the recovery test' },
+  { title: 'Operations intranet', detail: 'Explore staff records, documents, payroll, supervisor planning, coaching and call audits.', href: '/en/projects/operations-intranet', cta: 'Explore the intranet', image: ['intranet', 1085, 526], alt: 'Fictional intranet showing the supervisor’s task planning view' },
+  { title: 'WiseCX quality audit', detail: 'See how closed tickets are reviewed, then decide whether a flagged fictional ticket warrants follow-up.', href: '/en/projects/quality-review', cta: 'Open the review queue', image: ['quality', 1085, 730], alt: 'Fictional ticket review queue with a highlighted message' },
+  { title: 'Service recovery', detail: 'See how a backup was restored and checked in a reproducible exercise.', href: '/en/projects/service-recovery', cta: 'See the recovery test', image: ['recovery', 1085, 341], alt: 'Results of the local recovery test with synthetic data' },
 ] : [
-  { title: 'Intranet de operaciones', detail: 'Ve de una evaluación de calidad al fragmento exacto de la llamada que necesita revisar el analista.', href: '/proyectos/intranet-operaciones', cta: 'Ver evidencia de una llamada' },
-  { title: 'Revisión de calidad de tickets', detail: 'Revisa tres tickets ficticios y decide si el mensaje señalado requiere seguimiento.', href: '/proyectos/revision-calidad', cta: 'Abrir la cola de revisión' },
-  { title: 'Recuperación de un servicio', detail: 'Mira cómo se restauró y verificó una copia en un ensayo reproducible.', href: '/proyectos/recuperacion-servicio', cta: 'Ver ensayo de recuperación' },
+  { title: 'Intranet de operaciones', detail: 'Explora el directorio, los documentos, los recibos, la planificación, el coaching y las auditorías de llamadas.', href: '/proyectos/intranet-operaciones', cta: 'Explorar la intranet', image: ['intranet', 1085, 526], alt: 'Intranet ficticia con la vista de planificación de un supervisor' },
+  { title: 'Auditoría de calidad de WiseCX', detail: 'Conoce cómo se revisan los tickets cerrados y decide si una alerta de ejemplo requiere seguimiento.', href: '/proyectos/revision-calidad', cta: 'Abrir la cola de revisión', image: ['quality', 1085, 730], alt: 'Cola de tickets ficticios con el mensaje señalado en la conversación' },
+  { title: 'Recuperación de un servicio', detail: 'Mira cómo se restauró y verificó una copia en un ensayo reproducible.', href: '/proyectos/recuperacion-servicio', cta: 'Ver ensayo de recuperación', image: ['recovery', 1085, 341], alt: 'Resultados del ensayo local de recuperación con datos sintéticos' },
 ];
 ---
 <section class="wrap section-space" id="proyectos">
@@ -19,9 +19,12 @@ const operations = en ? [
     <h3 id="operations-heading">{en ? 'Operations case studies' : 'Casos de operaciones'}</h3>
     <div class="grid gap-4 md:grid-cols-3">
       {operations.map(item => <article class="surface operations-card">
-        <h4>{item.title}</h4>
-        <p>{item.detail}</p>
-        <a class="text-link motion-link" href={item.href}>{item.cta} <span aria-hidden="true">→</span></a>
+        <img class="operations-preview" src={`/preview-${item.image[0]}-${lang}.webp`} width={item.image[1]} height={item.image[2]} alt={item.alt} loading="lazy" decoding="async" />
+        <div class="operations-content">
+          <h4>{item.title}</h4>
+          <p>{item.detail}</p>
+          <a class="text-link motion-link" href={item.href}>{item.cta} <span aria-hidden="true">→</span></a>
+        </div>
       </article>)}
     </div>
   </section>
@@ -47,12 +50,13 @@ const operations = en ? [
       </article>
     ))}
   </div>
-  <section class="quality-teaser surface" id="trabajo-independiente" aria-labelledby="independent-project">
+  <section class="quality-teaser surface independent-project" id="trabajo-independiente" aria-labelledby="independent-project">
+    <img class="independent-preview" src={`/preview-channels-${lang}.webp`} width={en ? 1052 : 1053} height="850" alt={en ? 'Fictional message and the four steps of the illustrated contact flow' : 'Mensaje ficticio y cuatro pasos del flujo de atención ilustrativo'} loading="lazy" decoding="async" />
     <div>
       <p class="eyebrow">{en ? 'Independent work' : 'Trabajo independiente'}</p>
       <h3 id="independent-project">{channelsTitles[lang]}</h3>
       <p>{en ? 'Facebook, Instagram and WhatsApp Business setup, with three n8n automation prototypes.' : 'Configuración de Facebook, Instagram y WhatsApp Business, con tres prototipos de automatización en n8n.'}</p>
+      <a class="action secondary mt-4" href={channelsPaths[lang]}>{en ? 'View independent case' : 'Ver trabajo independiente'} →</a>
     </div>
-    <a class="action secondary" href={channelsPaths[lang]}>{en ? 'View independent case' : 'Ver trabajo independiente'} →</a>
   </section>
 </section>

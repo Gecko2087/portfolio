@@ -1,5 +1,6 @@
 ---
 import '../styles/site.css';
+import IntranetModules from './IntranetModules.astro';
 const { lang } = Astro.props;
 const en = lang === 'en';
 const home = en ? '/en' : '/';
@@ -7,8 +8,8 @@ const esPath = '/proyectos/intranet-operaciones';
 const enPath = '/en/projects/operations-intranet';
 const title = en ? 'Operations intranet' : 'Intranet de operaciones';
 const description = en
-  ? 'I worked on the call-audit interface so reviewers could connect each quality assessment to the corresponding point in the transcript.'
-  : 'Trabajé en la vista de auditoría de llamadas para que el equipo de calidad pudiera contrastar cada evaluación con el fragmento correspondiente de la transcripción.';
+  ? 'An internal platform for contact center staff, supervisors and managers. It brings together employee records, documents, task planning, coaching and quality reviews.'
+  : 'Una plataforma interna para empleados, supervisores y responsables del centro de contacto. Reúne la gestión de personal, documentos, planificación de tareas, coaching y controles de calidad.';
 const rows = en ? [
   { key: 'opening', time: '00:08', speaker: 'Agent', quote: 'Good morning. How can I help you with your request?', criterion: 'Opening', status: 'Evidence available' },
   { key: 'resolution', time: '00:43', speaker: 'Agent', quote: 'I’ll refer your request to the team that handles changes.', criterion: 'Resolution', status: 'Needs review' },
@@ -44,9 +45,11 @@ const rows = en ? [
     <main class="wrap case-page" id="main">
       <a class="text-link case-back" href={home + '#casos-operativos'}>← {en ? 'Operations case studies' : 'Casos de operaciones'}</a>
       <div class="case-grid audit-intro">
-        <div><p class="eyebrow">{en ? 'Internal tools · call quality' : 'Herramientas internas · calidad de llamadas'}</p><h1>{title}</h1></div>
+        <div><p class="eyebrow">{en ? 'Internal tools · contact center' : 'Herramientas internas · centro de contacto'}</p><h1>{title}</h1></div>
         <p class="intro">{description}</p>
       </div>
+      <IntranetModules lang={lang} />
+      <h2 class="section-title audit-section-title">{en ? 'Call audit module' : 'Módulo de auditoría de llamadas'}</h2>
       <div class="audit-grid">
         <section class="surface audit-panel" aria-labelledby="audit-criteria">
           <p class="eyebrow">{en ? 'Public example · fictional data' : 'Ejemplo público · datos ficticios'}</p>
@@ -81,6 +84,7 @@ const rows = en ? [
 
 <style>
   .audit-intro { margin-block: 16px 30px; }
+  .audit-section-title { margin-bottom: 1rem; }
   .audit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 1rem; }
   .audit-panel { padding: clamp(18px, 3vw, 32px); }
   .audit-panel h2 { font: 700 clamp(1.3rem, 3vw, 1.75rem)/1.2 var(--font-display); margin-block: .25rem .65rem; }

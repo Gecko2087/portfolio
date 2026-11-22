@@ -4,7 +4,7 @@ const { lang } = Astro.props;
 const en = lang === 'en';
 const home = en ? '/en' : '/';
 const path = en ? '/en/projects/quality-review' : '/proyectos/revision-calidad';
-const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
+const title = en ? 'WiseCX quality audit' : 'Auditoría de calidad WiseCX';
 ---
 <!doctype html>
 <html lang={lang}>
@@ -13,7 +13,7 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} · Lucas Nieto</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="description" content={en ? 'Run a quality rule on fictional tickets, inspect its evidence and record your review.' : 'Ejecuta una regla sobre tickets ficticios, inspecciona la evidencia y registra tu revisión.'} />
+    <meta name="description" content={en ? 'Explore a WiseCX quality audit workflow and try human review with synthetic tickets.' : 'Conoce un flujo de auditoría WiseCX y prueba la revisión humana con tickets sintéticos.'} />
     <link rel="canonical" href={new URL(path, Astro.site)} />
     <link rel="alternate" hreflang="es" href={new URL('/proyectos/revision-calidad', Astro.site)} />
     <link rel="alternate" hreflang="en" href={new URL('/en/projects/quality-review', Astro.site)} />
@@ -31,16 +31,22 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
     <main class="wrap case-page" id="main">
       <a class="text-link case-back" href={home + '#proyectos'}>← {en ? 'Selected projects' : 'Proyectos seleccionados'}</a>
       <div class="case-grid quality-intro">
-        <div><p class="eyebrow">{en ? 'Quality assurance · human review' : 'Control de calidad · revisión humana'}</p><h1>{title}</h1></div>
+        <div><p class="eyebrow">{en ? 'WiseCX · Python · Playwright · SQLite' : 'WiseCX · Python · Playwright · SQLite'}</p><h1>{title}</h1></div>
         <div>
-          <p class="intro">{en ? 'The queue opens with three fictional tickets ready to review. Choose a ticket, open the flagged message and record your decision.' : 'La cola abre con tres tickets ficticios listos para revisar. Elige un ticket, abre el mensaje señalado y guarda tu decisión.'}</p>
-          <p class="qa-context">{en ? 'Inspired by the quality workflow I built for WiseCX. This demo uses a repeat-contact rule to show how a reviewer can catch a false positive.' : 'Inspirado en el flujo de calidad que desarrollé para WiseCX. La demo usa una regla de contacto reiterado para mostrar cómo un analista detecta un falso positivo.'}</p>
+          <p class="intro">{en ? 'A closed ticket can still need attention. I built a local application that gathers closed cases, identifies possible service gaps and brings the evidence to a human reviewer.' : 'Un ticket cerrado puede necesitar atención. Desarrollé una aplicación local que reúne casos cerrados, identifica posibles desvíos y acerca la evidencia a quien los revisa.'}</p>
+          <p class="qa-context">{en ? 'Try the review step below with three synthetic tickets. The public demo runs a simple phrase rule in your browser; it does not connect to WiseCX or run AI analysis.' : 'Prueba la etapa de revisión con tres tickets sintéticos. La demo pública ejecuta una regla simple de frases en tu navegador; no se conecta a WiseCX ni ejecuta análisis de IA.'}</p>
         </div>
       </div>
+      <nav class="qa-start surface" aria-label={en ? 'Try the demo' : 'Probar la demo'}>
+        <div><strong>{en ? 'Your task: check the evidence before confirming a flag.' : 'Tu tarea: revisar la evidencia antes de confirmar una alerta.'}</strong>
+          <ol><li>{en ? 'Choose a ticket' : 'Elige un ticket'}</li><li>{en ? 'Read the flagged message in context' : 'Lee el mensaje señalado en contexto'}</li><li>{en ? 'Save a decision with a reason' : 'Guarda una decisión con su motivo'}</li></ol>
+        </div>
+        <a class="action primary" href="#review-demo">{en ? 'Open review queue' : 'Abrir cola de revisión'} ↓</a>
+      </nav>
       <p data-error role="alert" hidden></p>
       <button class="action secondary" type="button" data-retry-sample hidden>{en ? 'Retry loading the example' : 'Volver a cargar el ejemplo'}</button>
       <noscript><p>{en ? 'Enable JavaScript to open the review queue.' : 'Activa JavaScript para abrir la cola de revisión.'}</p></noscript>
-      <div class="qa-workbench" data-workbench hidden>
+      <div class="qa-workbench" id="review-demo" data-workbench hidden>
         <section class="surface qa-queue" aria-labelledby="queue-heading">
           <h2 id="queue-heading">{en ? 'Review queue' : 'Cola de revisión'}</h2>
           <p data-summary></p>
@@ -69,6 +75,17 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
           </div>
         </section>
       </div>
+      <section class="surface qa-real-flow" aria-labelledby="real-flow-heading">
+        <p class="eyebrow">{en ? 'Behind the project · verified in source code' : 'Detrás del proyecto · verificado en el código fuente'}</p>
+        <h2 id="real-flow-heading">{en ? 'From closed case to reviewable evidence' : 'Del caso cerrado a la evidencia revisable'}</h2>
+        <ol class="qa-flow">
+          <li><strong>{en ? 'Collect' : 'Reunir'}</strong><p>{en ? 'Playwright collects closed or resolved tickets for the selected period. A local SQLite database keeps records and prevents duplicates.' : 'Playwright reúne tickets cerrados o resueltos del período seleccionado. Una base local SQLite conserva los registros y evita duplicados.'}</p></li>
+          <li><strong>{en ? 'Check context' : 'Evaluar el contexto'}</strong><p>{en ? 'Rules examine the conversation, activity timeline and summary for possible process gaps or transfers without human follow-up. An official WiseCX summary is used when available, with a local fallback.' : 'Las reglas examinan conversación, actividades y resumen para buscar posibles fallas de proceso o derivaciones sin respuesta humana. Se utiliza el resumen oficial de WiseCX cuando está disponible, con respaldo local.'}</p></li>
+          <li><strong>{en ? 'Review' : 'Revisar'}</strong><p>{en ? 'Candidates appear in a review queue with supporting evidence, a suggested action and ticket screenshots. The reviewer can update the follow-up status; other tickets remain available separately.' : 'Los candidatos aparecen en una cola con evidencia, acción sugerida y capturas del ticket. El analista puede actualizar el estado de seguimiento; el resto de los tickets permanece disponible por separado.'}</p></li>
+        </ol>
+        <p class="qa-context">{en ? 'A design safeguard: a generic “no resolution” summary is insufficient on its own. The rules also consider human replies, explicit resolution and customer inactivity. A flag is a candidate for review, not a measured error rate or a final verdict.' : 'Una precaución de diseño: un resumen genérico de “sin resolución” no basta por sí solo. Las reglas también consideran respuestas humanas, resolución explícita e inactividad del cliente. Una alerta es un candidato a revisión, no una tasa de errores medida ni un veredicto final.'}</p>
+        <details class="qa-boundary"><summary>{en ? 'What does this demo demonstrate?' : '¿Qué demuestra esta demo?'}</summary><p>{en ? 'Only the review interaction: a deterministic rule flags a repeat-contact phrase, highlights the matching message and records your decision in this tab. One synthetic case quotes that phrase in a training question so you can investigate a false positive. The production collector, summaries, screenshots and broader rule set are described above, not executed here. No production results or accuracy claims are presented.' : 'Solo la interacción de revisión: una regla determinista señala una frase de contacto reiterado, resalta el mensaje y registra tu decisión en esta pestaña. Un caso sintético cita esa frase en una consulta de capacitación para que investigues un falso positivo. La recolección, los resúmenes, las capturas y las reglas más amplias del sistema se describen arriba; aquí no se ejecutan. No se presentan resultados operativos ni afirmaciones de precisión.'}</p></details>
+      </section>
       <details class="surface qa-import">
         <summary>{en ? 'Try another fictional batch (optional)' : 'Probar otro lote ficticio (opcional)'}</summary>
         <p id="batch-help">{en ? 'Use fictional tickets only. Files and decisions stay in this browser tab.' : 'Usa solo tickets ficticios. Los archivos y las decisiones quedan en esta pestaña.'}</p>
@@ -90,8 +107,18 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
 </html>
 
 <style>
-  .qa-import, .qa-ticket, .qa-queue { padding: clamp(1rem, 3vw, 2rem); }
-  .qa-import { margin-block: 1.5rem; }
+  .qa-import, .qa-ticket, .qa-queue, .qa-real-flow, .qa-start { padding: clamp(1rem, 3vw, 2rem); }
+  .qa-import, .qa-real-flow { margin-block: 1.5rem; }
+  .qa-start { display: flex; gap: 1.5rem; justify-content: space-between; align-items: center; margin-block: 1.5rem; }
+  .qa-start ol { display: flex; flex-wrap: wrap; gap: .4rem 1.75rem; padding-inline-start: 1.2rem; margin-block: .75rem 0; color: var(--muted); font-size: .9rem; }
+  .qa-start .action { flex-shrink: 0; }
+  #review-demo { scroll-margin-top: 6rem; }
+  .qa-real-flow h2 { font: 700 clamp(1.4rem, 3vw, 2rem)/1.2 var(--font-display); }
+  .qa-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; padding-inline-start: 1.25rem; margin-block: 1.5rem; }
+  .qa-flow li::marker { color: var(--accent); font-weight: 700; }
+  .qa-flow p, .qa-boundary p { color: var(--muted); margin-top: .5rem; font-size: .95rem; }
+  .qa-boundary { border-top: 1px solid var(--line); margin-top: 1rem; padding-top: 1rem; }
+  .qa-boundary summary { cursor: pointer; font-weight: 650; }
   .qa-workbench h2, .qa-import h2 { font: 700 1.35rem/1.2 var(--font-display); margin-block-end: 0.5rem; }
   .qa-ticket [data-messages] { display: grid; gap: 0.5rem; }
   .qa-import label, .qa-ticket label { display: block; margin-block-start: 0.8rem; font-weight: 650; }
@@ -115,5 +142,5 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
   [data-retry-sample][hidden] { display: none; }
   .qa-ticket :global([data-entries] li) { padding-block: 0.6rem; border-block-start: 1px solid var(--line); }
   .qa-ticket form button { justify-self: start; }
-  @media (max-width: 720px) { .qa-workbench:not([hidden]) { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 720px) { .qa-workbench:not([hidden]), .qa-flow { grid-template-columns: minmax(0, 1fr); } .qa-start { align-items: start; flex-direction: column; } .qa-start ol { display: grid; } }
 </style>

@@ -1,0 +1,82 @@
+---
+import { intranetModules } from '../data/intranet-modules.js';
+const { lang } = Astro.props;
+const en = lang === 'en';
+const modules = intranetModules[lang];
+---
+<section class="surface intranet-panel" aria-labelledby="intranet-workspace" data-intranet-preview>
+  <header class="intranet-header">
+    <div>
+      <p class="eyebrow">{en ? 'Interactive reconstruction · fictional data' : 'Recreación interactiva · datos ficticios'}</p>
+      <h2 id="intranet-workspace">{en ? 'Explore the intranet' : 'Explora la intranet'}</h2>
+    </div>
+    <p>{en ? 'Choose a module to see what employees, supervisors and managers can do.' : 'Elige un módulo para ver qué pueden hacer empleados, supervisores y responsables de gestión.'}</p>
+  </header>
+  <div class="intranet-window">
+    <nav aria-label={en ? 'Intranet modules' : 'Módulos de la intranet'}>
+      {modules.map(module => <a class="module-link" href={'#module-' + module.id}>{module.title}</a>)}
+    </nav>
+    <div class="intranet-content">
+      {modules.map(({ id, role, headline, description, items }) => <section class="intranet-module" id={'module-' + id} data-module>
+        <p class="module-role">{role}</p>
+        <h3>{headline}</h3>
+        <p>{description}</p>
+        <ul>
+          {items.map(([title, detail]) => <li><strong>{title}</strong><span>{detail}</span></li>)}
+        </ul>
+      </section>)}
+    </div>
+  </div>
+</section>
+
+<script>
+  const preview = document.querySelector('[data-intranet-preview]');
+  const panels = [...preview.querySelectorAll('[data-module]')];
+  const links = [...preview.querySelectorAll('.module-link')];
+
+  function showModule() {
+    const active = panels.find(panel => '#' + panel.id === window.location.hash) ?? panels[0];
+    for (const panel of panels) panel.hidden = panel !== active;
+    for (const link of links) {
+      if (link.hash === '#' + active.id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+  }
+
+  for (const link of links) {
+    link.addEventListener('click', event => {
+      if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (window.location.hash !== link.hash) window.history.pushState(null, '', link.hash);
+      showModule();
+    });
+  }
+  window.addEventListener('hashchange', showModule);
+  window.addEventListener('popstate', showModule);
+  showModule();
+</script>
+
+<style>
+  .intranet-panel { margin-bottom: clamp(24px, 5vw, 52px); padding: clamp(14px, 3vw, 32px); }
+  .intranet-header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 1rem; }
+  .intranet-header h2 { font: 700 clamp(1.4rem, 3vw, 2.1rem)/1.2 var(--font-display); margin-top: .35rem; }
+  .intranet-header > p { color: var(--muted); max-width: 40ch; }
+  .intranet-window { display: grid; grid-template-columns: minmax(165px,.65fr) minmax(0,2fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .intranet-window nav { background: var(--inset); display: grid; gap: .25rem; padding: .8rem; align-content: start; border-inline-end: 1px solid var(--line); }
+  .module-link { padding: .65rem .75rem; border: 1px solid transparent; border-radius: .5rem; font-weight: 650; }
+  .module-link:is([aria-current],:hover,:focus-visible) { background: var(--surface); border-color: var(--accent); }
+  .intranet-content { padding: clamp(.9rem, 2vw, 1.6rem); }
+  .intranet-module { scroll-margin-block-start: 5rem; }
+  .intranet-module + .intranet-module:not([hidden]) { margin-top: .9rem; }
+  .intranet-module h3 { margin-block: .5rem .3rem; font: 700 clamp(1.25rem, 3vw, 1.65rem)/1.2 var(--font-display); }
+  .intranet-module p:not(.module-role), .intranet-module li span { color: var(--muted); }
+  .module-role { border: 1px solid var(--line); border-radius: 4px; color: var(--accent); width: fit-content; padding: .15rem .45rem; font-size: .8rem; }
+  .intranet-module ul { display: grid; gap: .45rem; margin-top: .75rem; }
+  .intranet-module li { display: grid; gap: .15rem; background: var(--inset); border: 1px solid var(--line); border-radius: .6rem; padding: .65rem .75rem; }
+  .intranet-module li span { font-size: .88rem; }
+  @media (max-width: 700px) {
+    .intranet-window { grid-template-columns: minmax(0,1fr); }
+    .intranet-window nav { grid-template-columns: repeat(2,minmax(0,1fr)); border-inline-end: 0; border-bottom: 1px solid var(--line); }
+    .module-link { font-size: .86rem; }
+  }
+</style>
