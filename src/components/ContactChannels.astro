@@ -1,0 +1,94 @@
+---
+import '../styles/site.css';
+import { channelsPaths, channelsTitles } from '../data/contact-channels.js';
+const { lang } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en' : '/';
+const title = channelsTitles[lang];
+const description = en
+  ? 'I set up Facebook, Instagram and WhatsApp Business for a sales operation and designed three n8n workflows for handling inquiries.'
+  : 'Configuré Facebook, Instagram y WhatsApp Business para una operación comercial y diseñé tres flujos de atención en n8n.';
+const delivered = en ? [
+  ['Facebook and advertising', 'I set up the Facebook Page and ad account in Meta Business Suite and assigned access permissions to the business assets.'],
+  ['Instagram', 'I created the business profile and linked it to the Facebook Page.'],
+  ['WhatsApp Business', 'I set it up as a contact channel for sales inquiries.'],
+] : [
+  ['Facebook y publicidad', 'Configuré la página de Facebook y la cuenta publicitaria en Meta Business Suite, y asigné permisos de acceso a los activos comerciales.'],
+  ['Instagram', 'Creé el perfil comercial y lo vinculé con la página de Facebook.'],
+  ['WhatsApp Business', 'Lo dejé configurado como canal de contacto para consultas comerciales.'],
+];
+const connections = en ? [
+  ['One planned line', 'Meta WhatsApp Cloud API'],
+  ['Two planned lines', 'WAHA · unofficial connections'],
+] : [
+  ['Una línea prevista', 'WhatsApp Cloud API de Meta'],
+  ['Dos líneas previstas', 'WAHA · conexiones no oficiales'],
+];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · Lucas Nieto</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(channelsPaths[lang], Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(channelsPaths.es, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(channelsPaths.en, Astro.site)} />
+    <script is:inline src="/theme-init.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{en ? 'Skip to content' : 'Ir al contenido'}</a>
+    <header class="site-header glass"><div class="wrap header-row">
+      <a class="brand" href={home}>Lucas Nieto</a>
+      <div class="languages" aria-label={en ? 'Language' : 'Idioma'}>
+        <a href={channelsPaths.es} lang="es" aria-current={!en ? 'page' : undefined}>ES</a>
+        <a href={channelsPaths.en} lang="en" aria-current={en ? 'page' : undefined}>EN</a>
+      </div>
+    </div></header>
+    <main class="wrap case-page" id="main">
+      <a class="text-link case-back" href={home + '#trabajo-independiente'}>← {en ? 'Independent work' : 'Trabajo independiente'}</a>
+      <div class="channel-intro">
+        <p class="eyebrow">{en ? 'Independent work' : 'Trabajo independiente'}</p>
+        <h1>{title}</h1>
+        <p class="intro">{description}</p>
+      </div>
+      <section class="surface channel-panel" aria-labelledby="channel-delivery">
+        <h2 id="channel-delivery">{en ? 'What I delivered' : 'Trabajo entregado'}</h2>
+        <p>{en ? 'The business assets and their permissions were organized in Meta Business Suite. Facebook and Instagram were linked, and WhatsApp Business was set up for direct customer inquiries.' : 'Los activos comerciales y sus permisos quedaron organizados en Meta Business Suite. Facebook e Instagram quedaron vinculados y WhatsApp Business quedó habilitado para recibir consultas directas.'}</p>
+        <dl class="channel-grid">
+          {delivered.map(([label, detail]) => <div><dt>{label}</dt><dd>{detail}</dd></div>)}
+        </dl>
+      </section>
+      <section class="surface channel-panel" aria-labelledby="channel-prototype">
+        <h2 id="channel-prototype">{en ? 'Automation prototypes' : 'Prototipos de automatización'}</h2>
+        <p>{en ? 'I built three inquiry-handling workflows in n8n. The client did not confirm whether to proceed, and the project paused before deployment.' : 'Desarrollé tres flujos de atención con n8n. El trabajo quedó pausado antes del despliegue porque el cliente no confirmó la continuidad.'}</p>
+        <figure class="channel-diagram">
+          <figcaption>{en ? 'Planned architecture' : 'Arquitectura prevista'}</figcaption>
+          <ul class="channel-grid">
+            {connections.map(([label, integration]) => <li><span>{label}</span><strong>{integration}</strong></li>)}
+          </ul>
+          <p class="channel-target"><span aria-hidden="true">↓</span> <strong>n8n</strong> · {en ? 'Three inquiry-handling workflows' : 'Tres flujos de atención'}</p>
+        </figure>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .channel-intro { margin-block: 16px 32px; }
+  .channel-intro h1 { font: 700 clamp(2.25rem, 6vw, 4.6rem)/1.06 var(--font-display); max-width: 19ch; margin-block: .4rem 1rem; }
+  .channel-intro .intro { max-width: 64ch; }
+  .channel-panel { padding: clamp(18px, 3vw, 32px); margin-block: 1rem; }
+  .channel-panel h2 { font: 700 clamp(1.4rem, 3vw, 2rem)/1.2 var(--font-display); margin-bottom: .55rem; }
+  .channel-panel p, dd, .channel-diagram li span { color: var(--muted); }
+  .channel-grid { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); margin-top: 1rem; }
+  .channel-grid > * { padding: .85rem 1rem; border-radius: .7rem; background: var(--inset); border: 1px solid var(--line); }
+  dt, figcaption { font-weight: 700; }
+  dd { margin-top: .3rem; }
+  .channel-diagram { margin-top: 1.25rem; }
+  .channel-diagram li strong { display: block; margin-top: .2rem; }
+  .channel-target { padding: .7rem 0 0; }
+  .channel-target span { color: var(--accent); padding-inline-end: .35rem; }
+</style>

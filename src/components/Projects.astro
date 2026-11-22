@@ -1,5 +1,6 @@
 ---
 import BrandMark from './BrandMark.astro';
+import { channelsPaths, channelsTitles } from '../data/contact-channels.js';
 const { lang, projects } = Astro.props;
 const en = lang === 'en';
 ---
@@ -34,4 +35,12 @@ const en = lang === 'en';
     </div>
     <a class="action secondary" href={en ? '/en/projects/quality-review' : '/proyectos/revision-calidad'}>{en ? 'Open the review queue' : 'Abrir la cola de revisión'} →</a>
   </aside>
+  <section class="quality-teaser surface" id="trabajo-independiente" aria-labelledby="independent-project">
+    <div>
+      <p class="eyebrow">{en ? 'Independent work' : 'Trabajo independiente'}</p>
+      <h3 id="independent-project">{channelsTitles[lang]}</h3>
+      <p>{en ? 'Facebook, Instagram and WhatsApp Business setup, with three n8n automation prototypes.' : 'Configuración de Facebook, Instagram y WhatsApp Business, con tres prototipos de automatización en n8n.'}</p>
+    </div>
+    <a class="action secondary" href={channelsPaths[lang]}>{en ? 'View independent case' : 'Ver trabajo independiente'} →</a>
+  </section>
 </section>
