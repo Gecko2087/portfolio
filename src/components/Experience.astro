@@ -11,7 +11,6 @@ const en = lang === 'en';
       <div class="practice-item">
         <h3>{en ? 'Reporting automation' : 'Automatización de informes'}</h3>
         <p>{en ? 'Extraction, reconciliation and delivery for operational reports.' : 'Extracción, conciliación y entrega de informes operativos.'}</p>
-        <a class="motion-link" href={en ? '/en/projects/reporting' : '/proyectos/control-informes'}>{en ? 'View reporting case' : 'Ver caso de informes'} →</a>
       </div>
       <div class="practice-item">
         <h3>{en ? 'Applied AI' : 'IA aplicada'}</h3>
@@ -23,5 +22,22 @@ const en = lang === 'en';
       </div>
     </div>
     <a href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'Experience and education in my CV' : 'Experiencia y formación en mi CV'}</a>
+  </div>
+  <div class="experience-panel surface mt-5" id="impacto">
+    <p class="eyebrow">{en ? 'October 2026' : 'Octubre de 2026'}</p>
+    <h3 class="font-display text-2xl font-bold">{en ? 'Impact of reporting automation' : 'Impacto de la automatización de informes'}</h3>
+    <dl class="practice-grid impact-grid">
+      <div class="practice-item">
+        <dt>{en ? 'Reporting runs verified in logs' : 'Cortes verificados en registros'}</dt><dd>243</dd>
+      </div>
+      <div class="practice-item">
+        <dt>{en ? 'Total automated processing time' : 'Tiempo total de ejecución automática'}</dt><dd>28 h 43 min</dd>
+      </div>
+      <div class="practice-item">
+        <dt>{en ? 'Estimated equivalent manual effort' : 'Esfuerzo manual equivalente estimado'}</dt><dd>150–299 h</dd>
+      </div>
+    </dl>
+    <p>{en ? 'The processing total covers 243 runs. The manual estimate covers 221 comparable runs. Actual net savings remain to be measured.' : 'El tiempo automático cubre 243 cortes. La estimación manual corresponde a 221 cortes comparables. El ahorro neto sigue pendiente de medición.'}</p>
+    <a class="motion-link" href={en ? '/en/projects/reporting' : '/proyectos/control-informes'}>{en ? 'See the calculation' : 'Ver cómo se calculó'} →</a>
   </div>
 </section>

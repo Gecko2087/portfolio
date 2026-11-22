@@ -181,10 +181,9 @@ a { color: inherit; }
 .case-details :is(ol, p) { line-height: 1.65; color: var(--muted); }
 .case-details ol { list-style: decimal; padding-inline-start: 20px; }
 .case-details li + li { margin-top: 8px; }
-.ops-feature { display: grid; grid-template-rows: auto auto 1fr auto; justify-items: start; gap: 10px; padding: clamp(18px, 3vw, 30px); }
-.ops-feature h3 { font: 700 24px/1.1 var(--font-display); }
-.ops-feature p:not(.eyebrow) { color: var(--muted); }
-.ops-feature .action { margin-top: 4px; }
+.quality-teaser { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin-top: 22px; padding: clamp(18px, 3vw, 30px); }
+.quality-teaser h3 { font: 700 24px/1.1 var(--font-display); margin-bottom: 8px; }
+.quality-teaser p { color: var(--muted); }
 .quality-conversation li { padding: 10px 13px; background: var(--inset); border-radius: 8px; line-height: 1.5; }
 .quality-conversation li + li { margin: 0; }
 @media (width >= 800px) {
@@ -204,6 +203,8 @@ a { color: inherit; }
 .practice-icon { color: var(--accent); }
 .practice-item h3 { @apply font-display text-lg font-semibold; }
 .practice-item p { color: var(--muted); font-size: 13px; }
+.impact-grid dt { color: var(--muted); font-size: .85rem; }
+.impact-grid dd { font: 700 clamp(1.15rem, 2.5vw, 1.75rem)/1.2 var(--font-display); margin-top: .25rem; }
 .contact-panel { @apply grid gap-8 md:grid-cols-[1fr_1.2fr]; }
 .contact-intro h2 { margin-block: 14px; }
 .contact-intro h2 em { font-style: normal; }

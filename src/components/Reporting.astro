@@ -5,17 +5,10 @@ const en = lang === 'en';
 const home = en ? '/en' : '/';
 const esPath = '/proyectos/control-informes';
 const enPath = '/en/projects/reporting';
-const title = en ? 'Reporting controls' : 'Control de informes';
+const title = en ? 'Reporting automation' : 'Automatización de informes';
 const description = en
-  ? 'I automated data extraction, reconciliation and delivery for operations reports. This small demo shows how a report catches an incomplete source before it can be released.'
-  : 'Automaticé la extracción, conciliación y entrega de informes operativos. Esta demo muestra cómo el proceso detecta una fuente incompleta antes de liberar el informe.';
-const sources = en ? [
-  ['missing', 'Missing source'], ['stale', 'Previous period'], ['mismatch', 'Totals disagree'],
-  ['valid', 'Corrected source'], ['zero', 'Valid zero'],
-] : [
-  ['missing', 'Fuente ausente'], ['stale', 'Período anterior'], ['mismatch', 'Totales inconsistentes'],
-  ['valid', 'Fuente corregida'], ['zero', 'Cero válido'],
-];
+  ? 'I automated source downloads, data reconciliation, workbook generation and scheduled delivery for operations reports.'
+  : 'Automaticé la descarga de fuentes, la conciliación de datos, la generación de planillas y el envío programado de informes operativos.';
 ---
 <!doctype html>
 <html lang={lang}>
@@ -40,7 +33,7 @@ const sources = en ? [
       </div>
     </div></header>
     <main class="wrap case-page reporting" id="main">
-      <a class="text-link case-back" href={home + '#proyectos'}>← {en ? 'Selected projects' : 'Proyectos seleccionados'}</a>
+      <a class="text-link case-back" href={home + '#impacto'}>← {en ? 'Experience and impact' : 'Experiencia e impacto'}</a>
       <div class="case-grid">
         <div><p class="eyebrow">{en ? 'Operations automation' : 'Automatización de operaciones'}</p><h1>{title}</h1></div>
         <p class="intro">{description}</p>
@@ -48,39 +41,19 @@ const sources = en ? [
       <section class="surface report-panel" aria-labelledby="report-impact">
         <div>
           <p class="eyebrow">{en ? 'October 2026 · operations reporting' : 'Octubre de 2026 · informes operativos'}</p>
-          <h2 id="report-impact">{en ? 'Up to 299 hours of equivalent manual work' : 'Hasta 299 horas de trabajo manual equivalente'}</h2>
-          <p>{en ? 'High estimate for preparing 221 comparable reporting runs by hand. The time saved still needs to be measured.' : 'Estimación alta para preparar a mano 221 cortes comparables. El ahorro efectivo todavía está por medir.'}</p>
+          <h2 id="report-impact">{en ? '243 distinct reporting runs' : '243 cortes distintos de informes'}</h2>
+          <p>{en ? 'Execution records cover 10 report families and add up to 28 h 43 min of automated processing. I counted the first recorded successful run for each reporting period in each family.' : 'Los registros cubren 10 familias de informes y suman 28 h 43 min de ejecución automática. Para cada período y familia, conté la primera ejecución exitosa registrada.'}</p>
         </div>
-        <details>
-          <summary>{en ? 'How I calculated the estimate' : 'Cómo calculé la estimación'}</summary>
-          <p>{en ? 'Execution logs showed 243 distinct reporting runs across ten report families, totaling 28 h 43 min of elapsed processing time. For the 221 comparable runs, I multiplied the run count in each family by a reconstructed range of manual minutes per run. The result was approximately 150–299 hours. Shared extraction, current human supervision and maintenance can reduce the savings. The other 22 runs were volume-dependent audits.' : 'Los registros mostraron 243 cortes distintos de diez familias y 28 h 43 min acumulados de ejecución automática. Para los 221 cortes comparables multipliqué la cantidad de cada familia por un rango reconstruido de minutos manuales por corte. El resultado fue de unas 150–299 horas. La extracción compartida, la supervisión actual y el mantenimiento pueden reducir el ahorro. Los otros 22 cortes fueron auditorías cuyo esfuerzo depende del volumen.'}</p>
-        </details>
       </section>
-      <section class="surface report-panel" aria-labelledby="report-demo">
-        <div>
-          <p class="eyebrow">{en ? 'Browser demo · fictional data' : 'Demo en el navegador · datos ficticios'}</p>
-          <h2 id="report-demo">{en ? 'Validate a reporting run' : 'Valida un corte'}</h2>
-          <p>{en ? 'Try validating the missing source, then select the corrected one and download the CSV.' : 'Prueba validar con la fuente ausente. Luego elige la fuente corregida y descarga el CSV.'}</p>
-        </div>
-        <form class="report-form" id="report-form" hidden>
-          <label for="report-source">{en ? 'Source snapshot' : 'Estado de la fuente'}</label>
-          <div class="report-actions">
-            <select id="report-source">{sources.map(([value, label]) => <option value={value}>{label}</option>)}</select>
-            <button type="submit" class="action primary">{en ? 'Validate run' : 'Validar corte'}</button>
-            <a id="report-download" class="action secondary" download="operaciones-demo-2026-10-15.csv" hidden>{en ? 'Download CSV' : 'Descargar CSV'} ↓</a>
-          </div>
-          <p class="report-status" id="report-status" role="status"></p>
-        </form>
-        <noscript><p>{en ? 'Enable JavaScript to validate the sample.' : 'Activa JavaScript para validar el ejemplo.'}</p></noscript>
-        <div id="report-history" hidden>
-          <h3>{en ? 'Validation history' : 'Historial de validación'}</h3>
-          <ol id="report-events"></ol>
-        </div>
+      <section class="surface report-panel" aria-labelledby="manual-estimate">
+        <h2 id="manual-estimate">{en ? '150–299 hours of estimated manual work' : '150–299 horas de trabajo manual estimado'}</h2>
+        <p>{en ? 'For 221 comparable reporting runs, I estimated the manual minutes required for downloading, preparing, checking and delivering each report, then multiplied by the run count for each family. The other 22 runs were audits whose effort depends on the number of cases in each batch.' : 'Para los 221 cortes comparables, estimé los minutos que habría llevado descargar, preparar, revisar y entregar cada informe. Multipliqué ese esfuerzo por la cantidad de cortes de cada familia. Los otros 22 fueron auditorías cuyo esfuerzo depende de la cantidad de casos de cada lote.'}</p>
+      </section>
+      <section class="surface report-panel" aria-labelledby="savings-estimate">
+        <h2 id="savings-estimate">{en ? '129–279 hours of potential savings' : '129–279 horas de ahorro potencial'}</h2>
+        <p>{en ? 'This scenario deducts five minutes of human review for each of the 221 comparable runs and two hours of shared maintenance. Measuring actual savings requires timing review and rework, and confirming which reports the team would have produced manually.' : 'Este escenario descuenta cinco minutos de revisión humana por cada uno de los 221 cortes comparables y dos horas de mantenimiento común. Para calcular el ahorro real, falta cronometrar la revisión y las correcciones, y confirmar qué informes habría preparado manualmente el equipo.'}</p>
       </section>
     </main>
-    <script>
-      import '../scripts/reporting';
-    </script>
   </body>
 </html>
 
@@ -88,14 +61,5 @@ const sources = en ? [
   .reporting .case-grid { align-items: end; margin-block: 16px 30px; }
   .report-panel { display: grid; gap: 18px; margin-block: 16px; padding: clamp(18px, 3vw, 32px); }
   .report-panel h2 { font: 700 clamp(1.4rem, 3vw, 2rem)/1.14 var(--font-display); margin-block: 5px 9px; }
-  .report-panel p:not(.eyebrow), .report-panel ol { color: var(--muted); }
-  .report-panel details { padding-top: 12px; border-top: 1px solid var(--line); }
-  .report-panel details p { margin-top: 10px; max-width: 80ch; }
-  .report-panel summary { cursor: pointer; color: var(--accent); width: fit-content; }
-  .report-form label { display: block; font-weight: 650; margin-bottom: 6px; }
-  .report-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .report-actions select { color: var(--ink); background: var(--inset); border: 1px solid var(--line); border-radius: .7rem; padding: .55rem; min-height: 44px; max-width: 100%; }
-  .report-status:not(:empty) { margin-top: 12px; }
-  .report-panel [hidden] { display: none; }
-  .report-panel ol { margin-top: 6px; list-style: decimal inside; }
+  .report-panel p:not(.eyebrow) { color: var(--muted); max-width: 80ch; }
 </style>

@@ -11,6 +11,7 @@ const labels = en ? {
   failed: 'Could not import this batch. Check the JSON structure and unique ticket and message IDs.',
   tooLarge: 'Choose a JSON file up to 1 MB.', storage: 'Browser storage is unavailable or full. Changes are visible until you reload.',
   sampleError: 'Could not load the example. Try again.',
+  evidence: 'Message that triggered the rule',
 } : {
   sample: 'Lote de ejemplo', file: 'Lote importado', tickets: 'tickets', flags: 'alertas', duplicates: 'duplicados ignorados',
   flag: 'Con alerta', clear: 'Sin alerta', reviewed: 'Revisado', customer: 'Cliente', agent: 'Agente', system: 'Sistema',
@@ -21,6 +22,7 @@ const labels = en ? {
   failed: 'No se pudo importar el lote. Revisa la estructura del JSON y que los identificadores sean únicos.',
   tooLarge: 'Elige un archivo JSON de hasta 1 MB.', storage: 'El navegador no pudo guardar los cambios. Puedes verlos hasta que recargues.',
   sampleError: 'No se pudo cargar el ejemplo. Intenta de nuevo.',
+  evidence: 'Mensaje que activó la regla',
 };
 
 const key = 'portfolio-quality-review-v2-' + (en ? 'en' : 'es');
@@ -32,6 +34,8 @@ const evidence = find('[data-evidence]');
 const entries = find('[data-entries]');
 const feedback = find('[data-feedback]');
 const error = find('[data-error]');
+const importError = find('[data-import-error]');
+const retrySample = find('[data-retry-sample]');
 const reason = find('#reason');
 const fileInput = find('#quality-file');
 let state = { raw: '', sample: false, selected: '', decisions: [] };
@@ -46,9 +50,9 @@ function addText(parent, tag, value) {
   return element;
 }
 
-function showError(message) {
-  error.textContent = message;
-  error.hidden = !message;
+function showError(message, target = error) {
+  target.textContent = message;
+  target.hidden = !message;
 }
 
 function persist(message, status = feedback) {
@@ -82,7 +86,7 @@ function renderQueue() {
       state.selected = ticket.id;
       renderTicket();
       persist('');
-      button.focus();
+      if (window.matchMedia('(max-width: 720px)').matches) find('#ticket-heading').focus();
     });
     queue.append(item);
   }
@@ -107,7 +111,12 @@ function renderTicket() {
     addText(row, 'strong', (labels[message.role] ?? message.role) + ' · ' + message.id);
     addText(row, 'p', message.text);
     messages.append(row);
-    if (message.id === active.evidence) evidence.onclick = () => row.focus();
+    if (message.id === active.evidence) {
+      row.dataset.flagged = '';
+      const marker = addText(row, 'small', labels.evidence);
+      marker.dataset.messageFlag = '';
+      evidence.onclick = () => row.focus();
+    }
   }
   renderHistory();
   for (const [index, button] of [...queue.querySelectorAll('button')].entries()) {
@@ -133,6 +142,8 @@ function load(raw, sample, message = '') {
   state = { ...state, raw, sample };
   batch = next;
   showError('');
+  showError('', importError);
+  retrySample.hidden = true;
   find('[data-workbench]').hidden = false;
   renderQueue();
   renderTicket();
@@ -147,25 +158,29 @@ async function loadExample() {
     const raw = await response.text();
     if (request === batchRequest) load(raw, true, labels.sample);
   } catch {
-    if (request === batchRequest) showError(labels.sampleError);
+    if (request === batchRequest) {
+      showError(labels.sampleError, batch ? importError : error);
+      retrySample.hidden = Boolean(batch);
+    }
   }
 }
 
 find('[data-sample]').addEventListener('click', loadExample);
+retrySample.addEventListener('click', loadExample);
 fileInput.addEventListener('change', async () => {
   const [file] = fileInput.files;
   if (!file) return;
   fileInput.value = '';
   const request = ++batchRequest;
   if (file.size > LIMITS.bytes) {
-    showError(labels.tooLarge);
+    showError(labels.tooLarge, importError);
     return;
   }
   try {
     const raw = await file.text();
     if (request === batchRequest) load(raw, false, labels.file);
   } catch {
-    if (request === batchRequest) showError(labels.failed);
+    if (request === batchRequest) showError(labels.failed, importError);
   }
 });
 

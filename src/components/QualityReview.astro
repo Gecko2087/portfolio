@@ -31,21 +31,15 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
     <main class="wrap case-page" id="main">
       <a class="text-link case-back" href={home + '#proyectos'}>← {en ? 'Selected projects' : 'Proyectos seleccionados'}</a>
       <div class="case-grid quality-intro">
-        <div><p class="eyebrow">{en ? 'Interactive demo · rules' : 'Demo interactiva · reglas'}</p><h1>{title}</h1></div>
-        <p class="intro">{en ? 'Inspect the message behind each flag. Decide which case needs follow-up and explain your decision.' : 'Abre el mensaje que activó cada alerta. Decide qué caso merece seguimiento y explica tu decisión.'}</p>
-      </div>
-      <section class="surface qa-import" aria-labelledby="batch-heading">
-        <h2 id="batch-heading">{en ? 'Ticket batch' : 'Lote de tickets'}</h2>
-        <p id="batch-help">{en ? 'Use fictional tickets only. Files and decisions stay in this browser tab.' : 'Usa solo tickets ficticios. Los archivos y las decisiones quedan en esta pestaña.'}</p>
-        <div class="work-actions">
-          <button class="action secondary" type="button" data-sample>{en ? 'Load example batch' : 'Cargar lote de ejemplo'}</button>
-          <a class="text-link" href={en ? '/quality/sample-en.json' : '/quality/sample-es.json'} download>{en ? 'Download example JSON' : 'Descargar JSON de ejemplo'}</a>
+        <div><p class="eyebrow">{en ? 'Quality assurance · human review' : 'Control de calidad · revisión humana'}</p><h1>{title}</h1></div>
+        <div>
+          <p class="intro">{en ? 'The queue opens with three fictional tickets ready to review. Choose a ticket, open the flagged message and record your decision.' : 'La cola abre con tres tickets ficticios listos para revisar. Elige un ticket, abre el mensaje señalado y guarda tu decisión.'}</p>
+          <p class="qa-context">{en ? 'Inspired by the quality workflow I built for WiseCX. This demo uses a repeat-contact rule to show how a reviewer can catch a false positive.' : 'Inspirado en el flujo de calidad que desarrollé para WiseCX. La demo usa una regla de contacto reiterado para mostrar cómo un analista detecta un falso positivo.'}</p>
         </div>
-        <label for="quality-file">{en ? 'Import fictional tickets (JSON)' : 'Importar tickets ficticios (JSON)'}</label>
-        <input type="file" id="quality-file" accept=".json,application/json" aria-describedby="batch-help" />
-        <p data-feedback role="status"></p>
-        <p data-error role="alert" hidden></p>
-      </section>
+      </div>
+      <p data-error role="alert" hidden></p>
+      <button class="action secondary" type="button" data-retry-sample hidden>{en ? 'Retry loading the example' : 'Volver a cargar el ejemplo'}</button>
+      <noscript><p>{en ? 'Enable JavaScript to open the review queue.' : 'Activa JavaScript para abrir la cola de revisión.'}</p></noscript>
       <div class="qa-workbench" data-workbench hidden>
         <section class="surface qa-queue" aria-labelledby="queue-heading">
           <h2 id="queue-heading">{en ? 'Review queue' : 'Cola de revisión'}</h2>
@@ -53,7 +47,7 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
           <ul data-queue></ul>
         </section>
         <section class="surface qa-ticket" aria-labelledby="ticket-heading">
-          <h2 id="ticket-heading"></h2>
+          <h2 id="ticket-heading" tabindex="-1"></h2>
           <p data-rule></p>
           <button class="action secondary" data-evidence type="button">{en ? 'Go to flagged message' : 'Ir al mensaje señalado'}</button>
           <ol data-messages class="quality-conversation"></ol>
@@ -75,6 +69,18 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
           </div>
         </section>
       </div>
+      <details class="surface qa-import">
+        <summary>{en ? 'Try another fictional batch (optional)' : 'Probar otro lote ficticio (opcional)'}</summary>
+        <p id="batch-help">{en ? 'Use fictional tickets only. Files and decisions stay in this browser tab.' : 'Usa solo tickets ficticios. Los archivos y las decisiones quedan en esta pestaña.'}</p>
+        <div class="work-actions">
+          <button class="action secondary" type="button" data-sample>{en ? 'Restore example batch' : 'Volver al lote de ejemplo'}</button>
+          <a class="text-link" href={en ? '/quality/sample-en.json' : '/quality/sample-es.json'} download>{en ? 'Download example JSON' : 'Descargar JSON de ejemplo'}</a>
+        </div>
+        <label for="quality-file">{en ? 'Import fictional tickets (JSON)' : 'Importar tickets ficticios (JSON)'}</label>
+        <input type="file" id="quality-file" accept=".json,application/json" aria-describedby="batch-help" />
+        <p data-feedback role="status"></p>
+        <p data-import-error role="alert" hidden></p>
+      </details>
       <a class="text-link" href={home + '#contacto'}>{en ? 'Contact Lucas' : 'Contactar a Lucas'} →</a>
     </main>
     <script>
@@ -91,7 +97,8 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
   .qa-import label, .qa-ticket label { display: block; margin-block-start: 0.8rem; font-weight: 650; }
   .qa-import p { margin-block: 0.5rem; }
   .qa-import input { margin-block: 0.4rem; max-width: 100%; }
-  .qa-import [role="alert"] { font-weight: 700; }
+  .qa-import summary { cursor: pointer; font-weight: 700; }
+  .qa-context { color: var(--muted); font-size: .9rem; margin-top: .75rem; }
   .qa-workbench:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 1rem; margin-block: 1.5rem; align-items: start; }
   .qa-queue ul, .qa-ticket ol { padding-inline-start: 0; list-style: none; }
   .qa-ticket ol { margin-block: 1rem; }
@@ -102,6 +109,10 @@ const title = en ? 'Ticket quality review' : 'Revisión de calidad de tickets';
   .qa-queue :global(.qa-select small) { color: var(--accent); }
   .qa-ticket :global(li) { overflow-wrap: anywhere; white-space: pre-wrap; }
   .qa-ticket :global([data-messages] li:focus) { outline: 2px solid var(--accent); outline-offset: 2px; scroll-margin-block: 5rem 1rem; }
+  .qa-ticket :global([data-messages] li[data-flagged]) { border-inline-start: 3px solid var(--accent); }
+  .qa-ticket :global([data-messages] [data-message-flag]) { display: block; color: var(--accent); }
+  #ticket-heading { scroll-margin-top: 5rem; }
+  [data-retry-sample][hidden] { display: none; }
   .qa-ticket :global([data-entries] li) { padding-block: 0.6rem; border-block-start: 1px solid var(--line); }
   .qa-ticket form button { justify-self: start; }
   @media (max-width: 720px) { .qa-workbench:not([hidden]) { grid-template-columns: minmax(0, 1fr); } }
