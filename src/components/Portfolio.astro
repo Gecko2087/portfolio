@@ -55,7 +55,7 @@ const origin = Astro.site.origin;
     <main id="main">
       <Hero lang={lang} project={featured} projects={data.projects} />
       <Projects lang={lang} projects={data.projects} />
-      <Experience lang={lang} experience={data.experience} />
+      <Experience lang={lang} />
       <Contact intro={data.contactIntro} form={data.contactForm} />
     </main>
     <footer class="wrap footer"><p>© {new Date().getFullYear()} Lucas Nieto</p></footer>

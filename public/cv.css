@@ -1,0 +1,20 @@
+body { font: 14px/1.5 Arial, sans-serif; color: #17201d; max-width: 780px; margin: 36px auto; padding: 0 24px; overflow-wrap: anywhere; }
+h1 { font-size: 32px; line-height: 1.1; margin: 0; }
+h2 { font-size: 16px; border-bottom: 1px solid #a4b5aa; padding-bottom: 4px; margin: 18px 0 7px; }
+h3 { font-size: 14px; margin: 8px 0 3px; }
+p { margin: 5px 0; }
+a { color: #26503e; text-underline-offset: 2px; }
+ul { padding-left: 19px; margin-block: 7px; }
+li + li { margin-top: 4px; }
+.subtitle { font-size: 16px; color: #365644; }
+.meta { color: #4f625a; font-size: 12px; }
+.contacts { display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 1px; }
+.print-controls { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
+.print-controls button { padding: 8px 12px; border: 1px solid #bac9bf; border-radius: 6px; background: #f0f4ef; cursor: pointer; }
+@page { size: A4; margin: 14mm; }
+@media print {
+  body { margin: 0; max-width: none; font-size: 11pt; padding: 0; line-height: 1.42; }
+  .print-controls { display: none; }
+  h2 { margin-top: 16px; }
+  h2, h3 { break-after: avoid; }
+}

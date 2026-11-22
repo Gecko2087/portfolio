@@ -1,7 +1,27 @@
 ---
-const { lang, experience } = Astro.props;
+const { lang } = Astro.props;
+const en = lang === 'en';
 ---
 <section id="sobre" class="wrap section-space">
   <h2 class="section-title mb-7">{lang === 'en' ? 'Experience' : 'Experiencia'}</h2>
-  <div class="experience-panel surface" data-reveal set:html={experience} />
+  <div class="experience-panel surface" data-reveal>
+    <p class="job-title">IT Lead <span class="employer">@ Talking</span><span class="job-period">{en ? '2020 — present' : '2020 — presente'}</span></p>
+    <p>{en ? 'I develop internal web applications, integrate customer service systems and maintain services on Linux.' : 'Desarrollo aplicaciones web internas, integro sistemas de atención y mantengo servicios en Linux.'}</p>
+    <div class="practice-grid">
+      <div class="practice-item">
+        <h3>{en ? 'Reporting automation' : 'Automatización de informes'}</h3>
+        <p>{en ? 'Extraction, reconciliation and delivery for operational reports.' : 'Extracción, conciliación y entrega de informes operativos.'}</p>
+        <a class="motion-link" href={en ? '/en/projects/reporting' : '/proyectos/control-informes'}>{en ? 'View reporting case' : 'Ver caso de informes'} →</a>
+      </div>
+      <div class="practice-item">
+        <h3>{en ? 'Applied AI' : 'IA aplicada'}</h3>
+        <p>{en ? 'Quality review with call transcripts, speaker identification and evidence for human review.' : 'Control de calidad con transcripción de llamadas, identificación de hablantes y revisión humana de la evidencia.'}</p>
+      </div>
+      <div class="practice-item">
+        <h3>DevOps</h3>
+        <p>{en ? 'Deployment with Docker and Nginx. Off-site backups are verified before retention runs.' : 'Despliegues con Docker y Nginx. Verificación de copias externas antes de aplicar la retención.'}</p>
+      </div>
+    </div>
+    <a href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'Experience and education in my CV' : 'Experiencia y formación en mi CV'}</a>
+  </div>
 </section>

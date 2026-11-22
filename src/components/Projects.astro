@@ -5,6 +5,20 @@ const en = lang === 'en';
 ---
 <section class="wrap section-space" id="proyectos">
   <h2 class="section-title mb-7">{en ? 'Selected projects' : 'Proyectos seleccionados'}</h2>
+  <div class="grid gap-5 mb-6 md:grid-cols-2">
+    <article class="ops-feature surface">
+      <p class="eyebrow">{en ? 'Automation' : 'Automatización'}</p>
+      <h3>{en ? 'Reporting controls' : 'Control de informes'}</h3>
+      <p>{en ? 'Find the problem with a source, reconcile the figures and download the validated report.' : 'Detecta un problema en la fuente, concilia las cifras y descarga el informe validado.'}</p>
+      <a class="action primary" href={en ? '/en/projects/reporting' : '/proyectos/control-informes'}>{en ? 'View case and try demo' : 'Ver caso y probar demo'} →</a>
+    </article>
+    <article class="ops-feature surface">
+      <p class="eyebrow">{en ? 'Human review' : 'Revisión humana'}</p>
+      <h3>{en ? 'Ticket quality review' : 'Revisión de calidad de tickets'}</h3>
+      <p>{en ? 'Follow the evidence behind a rule and decide whether each flag stands.' : 'Sigue la evidencia de una regla y decide si corresponde mantener cada alerta.'}</p>
+      <a class="action secondary" href={en ? '/en/projects/quality-review' : '/proyectos/revision-calidad'}>{en ? 'Review conversations' : 'Revisar conversaciones'} →</a>
+    </article>
+  </div>
   <div class="grid gap-5 md:grid-cols-2 md:gap-6">
     {projects.map(project => (
       <article class:list={['project-card', { 'compact-project': ['passforge', 'taskapi'].includes(project.key) }]} data-reveal data-tone={project.key} id={'project-' + project.key}>
@@ -27,12 +41,4 @@ const en = lang === 'en';
       </article>
     ))}
   </div>
-  <aside class="quality-teaser surface">
-    <div>
-      <p class="eyebrow">{en ? 'Interactive demo' : 'Demo interactiva'}</p>
-      <h3>{en ? 'Ticket quality review' : 'Revisión de calidad de tickets'}</h3>
-      <p>{en ? 'Follow the evidence behind a rule and decide whether each flag stands.' : 'Sigue la evidencia de una regla y decide si corresponde mantener cada alerta.'}</p>
-    </div>
-    <a class="action secondary" href={en ? '/en/projects/quality-review' : '/proyectos/revision-calidad'}>{en ? 'Review conversations' : 'Revisar conversaciones'} →</a>
-  </aside>
 </section>

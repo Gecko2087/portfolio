@@ -16,15 +16,12 @@ const stages = en ? [
   <div class="hero-copy">
     <p class="eyebrow" data-hero-motion><span class="status-dot"></span> Full Stack Developer</p>
     <h1 data-hero-motion><span class="signature-name"><span>Lucas</span> <span>Nieto</span></span></h1>
-    <p class="intro" data-hero-motion>{en ? 'I build tools that help teams track incidents, review decisions and see what changed.' : 'Construyo herramientas para que los equipos puedan seguir incidentes, revisar decisiones y saber qué cambió.'}</p>
+    <p class="intro" data-hero-motion>{en ? 'I build software for operations teams. I integrate data sources, automate reporting and make AI-assisted decisions reviewable.' : 'Desarrollo software para equipos de operaciones. Integro fuentes de datos, automatizo informes y diseño flujos para revisar decisiones asistidas por IA.'}</p>
     <div class="mt-7 flex flex-wrap gap-3" data-hero-motion>
-      <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'Review a support ticket' : 'Revisar un incidente'} <span class="link-arrow" aria-hidden="true">→</span></a>
+      <a class="action primary" href={en ? '/en/projects/helpdesk' : '/proyectos/helpdesk'}>{en ? 'View HelpDesk case' : 'Ver caso de HelpDesk'} <span class="link-arrow" aria-hidden="true">→</span></a>
       <a class="action secondary" href={en ? '/cv-en.html' : '/cv.html'}>{en ? 'View CV' : 'Ver CV'} <span class="link-arrow" aria-hidden="true">↗</span></a>
     </div>
     <button hidden type="button" id="hero-motion-choice" class="hero-motion-choice" aria-pressed="false">{en ? 'Animate this cover' : 'Animar esta portada'}</button>
-    <ul class="tech-grid" role="list" aria-label={en ? 'Technologies used in my work' : 'Tecnologías que utilizo'}>
-      {technologies.map(name => <li><BrandMark name={name} />{name}</li>)}
-    </ul>
   </div>
   <div class="scene" data-scene={project.key} data-hero-motion>
     <div class="scene-aura" aria-hidden="true"></div>
@@ -62,4 +59,7 @@ const stages = en ? [
       ))}
     </div>
   </div>
+  <ul class="tech-grid" role="list" aria-label={en ? 'Technologies used in my work' : 'Tecnologías que utilizo'}>
+    {technologies.map(name => <li><BrandMark name={name} />{name}</li>)}
+  </ul>
 </section>

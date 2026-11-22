@@ -1,0 +1,101 @@
+---
+import '../styles/site.css';
+const { lang } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en' : '/';
+const esPath = '/proyectos/control-informes';
+const enPath = '/en/projects/reporting';
+const title = en ? 'Reporting controls' : 'Control de informes';
+const description = en
+  ? 'I automated data extraction, reconciliation and delivery for operations reports. This small demo shows how a report catches an incomplete source before it can be released.'
+  : 'Automaticé la extracción, conciliación y entrega de informes operativos. Esta demo muestra cómo el proceso detecta una fuente incompleta antes de liberar el informe.';
+const sources = en ? [
+  ['missing', 'Missing source'], ['stale', 'Previous period'], ['mismatch', 'Totals disagree'],
+  ['valid', 'Corrected source'], ['zero', 'Valid zero'],
+] : [
+  ['missing', 'Fuente ausente'], ['stale', 'Período anterior'], ['mismatch', 'Totales inconsistentes'],
+  ['valid', 'Fuente corregida'], ['zero', 'Cero válido'],
+];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · Lucas Nieto</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(en ? enPath : esPath, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(esPath, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />
+    <script is:inline src="/theme-init.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{en ? 'Skip to content' : 'Ir al contenido'}</a>
+    <header class="site-header glass"><div class="wrap header-row">
+      <a class="brand" href={home}>Lucas Nieto</a>
+      <div class="languages" aria-label={en ? 'Language' : 'Idioma'}>
+        <a href={esPath} lang="es" aria-current={!en ? 'page' : undefined}>ES</a>
+        <a href={enPath} lang="en" aria-current={en ? 'page' : undefined}>EN</a>
+      </div>
+    </div></header>
+    <main class="wrap case-page reporting" id="main">
+      <a class="text-link case-back" href={home + '#proyectos'}>← {en ? 'Selected projects' : 'Proyectos seleccionados'}</a>
+      <div class="case-grid">
+        <div><p class="eyebrow">{en ? 'Operations automation' : 'Automatización de operaciones'}</p><h1>{title}</h1></div>
+        <p class="intro">{description}</p>
+      </div>
+      <section class="surface report-panel" aria-labelledby="report-impact">
+        <div>
+          <p class="eyebrow">{en ? 'October 2026 · operations reporting' : 'Octubre de 2026 · informes operativos'}</p>
+          <h2 id="report-impact">{en ? 'Up to 299 hours of equivalent manual work' : 'Hasta 299 horas de trabajo manual equivalente'}</h2>
+          <p>{en ? 'High estimate for preparing 221 comparable reporting runs by hand. The time saved still needs to be measured.' : 'Estimación alta para preparar a mano 221 cortes comparables. El ahorro efectivo todavía está por medir.'}</p>
+        </div>
+        <details>
+          <summary>{en ? 'How I calculated the estimate' : 'Cómo calculé la estimación'}</summary>
+          <p>{en ? 'Execution logs showed 243 distinct reporting runs across ten report families, totaling 28 h 43 min of elapsed processing time. For the 221 comparable runs, I multiplied the run count in each family by a reconstructed range of manual minutes per run. The result was approximately 150–299 hours. Shared extraction, current human supervision and maintenance can reduce the savings. The other 22 runs were volume-dependent audits.' : 'Los registros mostraron 243 cortes distintos de diez familias y 28 h 43 min acumulados de ejecución automática. Para los 221 cortes comparables multipliqué la cantidad de cada familia por un rango reconstruido de minutos manuales por corte. El resultado fue de unas 150–299 horas. La extracción compartida, la supervisión actual y el mantenimiento pueden reducir el ahorro. Los otros 22 cortes fueron auditorías cuyo esfuerzo depende del volumen.'}</p>
+        </details>
+      </section>
+      <section class="surface report-panel" aria-labelledby="report-demo">
+        <div>
+          <p class="eyebrow">{en ? 'Browser demo · fictional data' : 'Demo en el navegador · datos ficticios'}</p>
+          <h2 id="report-demo">{en ? 'Validate a reporting run' : 'Valida un corte'}</h2>
+          <p>{en ? 'Try validating the missing source, then select the corrected one and download the CSV.' : 'Prueba validar con la fuente ausente. Luego elige la fuente corregida y descarga el CSV.'}</p>
+        </div>
+        <form class="report-form" id="report-form" hidden>
+          <label for="report-source">{en ? 'Source snapshot' : 'Estado de la fuente'}</label>
+          <div class="report-actions">
+            <select id="report-source">{sources.map(([value, label]) => <option value={value}>{label}</option>)}</select>
+            <button type="submit" class="action primary">{en ? 'Validate run' : 'Validar corte'}</button>
+            <a id="report-download" class="action secondary" download="operaciones-demo-2026-10-15.csv" hidden>{en ? 'Download CSV' : 'Descargar CSV'} ↓</a>
+          </div>
+          <p class="report-status" id="report-status" role="status"></p>
+        </form>
+        <noscript><p>{en ? 'Enable JavaScript to validate the sample.' : 'Activa JavaScript para validar el ejemplo.'}</p></noscript>
+        <div id="report-history" hidden>
+          <h3>{en ? 'Validation history' : 'Historial de validación'}</h3>
+          <ol id="report-events"></ol>
+        </div>
+      </section>
+    </main>
+    <script>
+      import '../scripts/reporting';
+    </script>
+  </body>
+</html>
+
+<style>
+  .reporting .case-grid { align-items: end; margin-block: 16px 30px; }
+  .report-panel { display: grid; gap: 18px; margin-block: 16px; padding: clamp(18px, 3vw, 32px); }
+  .report-panel h2 { font: 700 clamp(1.4rem, 3vw, 2rem)/1.14 var(--font-display); margin-block: 5px 9px; }
+  .report-panel p:not(.eyebrow), .report-panel ol { color: var(--muted); }
+  .report-panel details { padding-top: 12px; border-top: 1px solid var(--line); }
+  .report-panel details p { margin-top: 10px; max-width: 80ch; }
+  .report-panel summary { cursor: pointer; color: var(--accent); width: fit-content; }
+  .report-form label { display: block; font-weight: 650; margin-bottom: 6px; }
+  .report-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .report-actions select { color: var(--ink); background: var(--inset); border: 1px solid var(--line); border-radius: .7rem; padding: .55rem; min-height: 44px; max-width: 100%; }
+  .report-status:not(:empty) { margin-top: 12px; }
+  .report-panel [hidden] { display: none; }
+  .report-panel ol { margin-top: 6px; list-style: decimal inside; }
+</style>
