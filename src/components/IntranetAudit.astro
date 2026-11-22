@@ -1,0 +1,101 @@
+---
+import '../styles/site.css';
+const { lang } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en' : '/';
+const esPath = '/proyectos/intranet-operaciones';
+const enPath = '/en/projects/operations-intranet';
+const title = en ? 'Operations intranet' : 'Intranet de operaciones';
+const description = en
+  ? 'I worked on the call-audit interface so reviewers could connect each quality assessment to the corresponding point in the transcript.'
+  : 'Trabajé en la vista de auditoría de llamadas para que el equipo de calidad pudiera contrastar cada evaluación con el fragmento correspondiente de la transcripción.';
+const rows = en ? [
+  { key: 'opening', time: '00:08', speaker: 'Agent', quote: 'Good morning. How can I help you with your request?', criterion: 'Opening', status: 'Evidence available' },
+  { key: 'resolution', time: '00:43', speaker: 'Agent', quote: 'I’ll refer your request to the team that handles changes.', criterion: 'Resolution', status: 'Needs review' },
+  { key: 'closing', time: '00:57', speaker: 'Caller', quote: 'Thanks. How will I know when the change is complete?', criterion: 'Closing', status: 'Needs review' },
+] : [
+  { key: 'opening', time: '00:08', speaker: 'Agente', quote: 'Buenos días. ¿En qué te puedo ayudar con tu solicitud?', criterion: 'Apertura', status: 'Evidencia disponible' },
+  { key: 'resolution', time: '00:43', speaker: 'Agente', quote: 'Voy a derivar tu solicitud al equipo que gestiona los cambios.', criterion: 'Resolución', status: 'Requiere revisión' },
+  { key: 'closing', time: '00:57', speaker: 'Persona que llama', quote: 'Gracias. ¿Cómo voy a saber cuando el cambio esté hecho?', criterion: 'Cierre', status: 'Requiere revisión' },
+];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · Lucas Nieto</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(en ? enPath : esPath, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(esPath, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />
+    <script is:inline src="/theme-init.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{en ? 'Skip to content' : 'Ir al contenido'}</a>
+    <header class="site-header glass"><div class="wrap header-row">
+      <a class="brand" href={home}>Lucas Nieto</a>
+      <div class="languages" aria-label={en ? 'Language' : 'Idioma'}>
+        <a href={esPath} lang="es" aria-current={!en ? 'page' : undefined}>ES</a>
+        <a href={enPath} lang="en" aria-current={en ? 'page' : undefined}>EN</a>
+      </div>
+    </div></header>
+    <main class="wrap case-page" id="main">
+      <a class="text-link case-back" href={home + '#casos-operativos'}>← {en ? 'Operations case studies' : 'Casos de operaciones'}</a>
+      <div class="case-grid audit-intro">
+        <div><p class="eyebrow">{en ? 'Internal tools · call quality' : 'Herramientas internas · calidad de llamadas'}</p><h1>{title}</h1></div>
+        <p class="intro">{description}</p>
+      </div>
+      <div class="audit-grid">
+        <section class="surface audit-panel" aria-labelledby="audit-criteria">
+          <p class="eyebrow">{en ? 'Public example · fictional data' : 'Ejemplo público · datos ficticios'}</p>
+          <h2 id="audit-criteria">{en ? 'Review the evidence' : 'Revisa la evidencia'}</h2>
+          <p>{en ? 'Choose a criterion to jump to its excerpt.' : 'Elige un criterio para ir a su fragmento en la transcripción.'}</p>
+          <ul class="audit-criteria">
+            {rows.map(({ key, time, criterion, status }) => <li>
+              <a href={'#' + key} class="action secondary"><span><strong>{criterion}</strong><small>{status}</small></span><span>{time} ↓</span></a>
+            </li>)}
+          </ul>
+        </section>
+        <section class="surface audit-panel" aria-labelledby="audit-transcript">
+          <h2 id="audit-transcript">{en ? 'Call transcript' : 'Transcripción de la llamada'}</h2>
+          <ol class="audit-transcript">
+            {rows.map(({ key, time, speaker, quote }) => <li id={key} tabindex="-1">
+              <p><strong>{time}</strong> · {speaker}</p><blockquote>{quote}</blockquote>
+            </li>)}
+          </ol>
+          <p class="audit-observation"><strong>{en ? 'Review note' : 'Observación de revisión'}</strong> {en ? 'The agent referred the request. The excerpt leaves the outcome and follow-up open.' : 'El agente derivó la solicitud. El fragmento deja pendientes el resultado y el seguimiento.'}</p>
+        </section>
+      </div>
+      <section class="surface audit-panel audit-implementation" aria-labelledby="audit-implementation">
+        <h2 id="audit-implementation">{en ? 'What I worked on' : 'En qué trabajé'}</h2>
+        <ul>
+          <li>{en ? 'Display the criteria, final observation and supporting excerpts together so reviewers can check the assessment.' : 'Mostrar juntos los criterios, la observación final y los fragmentos de evidencia para que el equipo pueda revisar la evaluación.'}</li>
+          <li>{en ? 'Import transcripts and assessments with a reference to the source call. Audio stays in the source system. Imported cases enter the human review queue.' : 'Importar la transcripción y la evaluación con una referencia a la llamada de origen. El audio queda en el sistema de origen. Los casos importados quedan pendientes de revisión humana.'}</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .audit-intro { margin-block: 16px 30px; }
+  .audit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 1rem; }
+  .audit-panel { padding: clamp(18px, 3vw, 32px); }
+  .audit-panel h2 { font: 700 clamp(1.3rem, 3vw, 1.75rem)/1.2 var(--font-display); margin-block: .25rem .65rem; }
+  .audit-panel p { color: var(--muted); }
+  .audit-panel .eyebrow { color: var(--accent); }
+  .audit-criteria, .audit-transcript { display: grid; gap: .6rem; margin-top: 1rem; }
+  .audit-criteria a { display: flex; justify-content: space-between; gap: 1rem; text-align: start; }
+  .audit-criteria small { display: block; color: var(--muted); }
+  .audit-transcript li { background: var(--inset); padding: .8rem 1rem; border: 1px solid var(--line); border-radius: .7rem; scroll-margin-block-start: 5rem; }
+  .audit-transcript li:is(:target, :focus) { border-color: var(--accent); outline: 1px solid var(--accent); }
+  .audit-transcript blockquote { margin-top: .3rem; }
+  .audit-observation { margin-top: 1rem; }
+  .audit-observation strong { display: block; color: var(--ink); }
+  .audit-implementation { margin-top: 1rem; }
+  .audit-implementation ul { list-style: disc; padding-inline-start: 1.4rem; color: var(--muted); }
+  .audit-implementation li + li { margin-top: .5rem; }
+  @media (max-width: 720px) { .audit-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

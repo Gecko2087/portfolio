@@ -3,9 +3,28 @@ import BrandMark from './BrandMark.astro';
 import { channelsPaths, channelsTitles } from '../data/contact-channels.js';
 const { lang, projects } = Astro.props;
 const en = lang === 'en';
+const operations = en ? [
+  { title: 'Operations intranet', detail: 'Trace a call assessment back to the exact excerpt a reviewer needs to check.', href: '/en/projects/operations-intranet', cta: 'See call evidence' },
+  { title: 'Ticket quality review', detail: 'Review three fictional tickets and decide whether the flagged message warrants follow-up.', href: '/en/projects/quality-review', cta: 'Open the review queue' },
+  { title: 'Service recovery', detail: 'See how a backup was restored and checked in a reproducible exercise.', href: '/en/projects/service-recovery', cta: 'See the recovery test' },
+] : [
+  { title: 'Intranet de operaciones', detail: 'Ve de una evaluación de calidad al fragmento exacto de la llamada que necesita revisar el analista.', href: '/proyectos/intranet-operaciones', cta: 'Ver evidencia de una llamada' },
+  { title: 'Revisión de calidad de tickets', detail: 'Revisa tres tickets ficticios y decide si el mensaje señalado requiere seguimiento.', href: '/proyectos/revision-calidad', cta: 'Abrir la cola de revisión' },
+  { title: 'Recuperación de un servicio', detail: 'Mira cómo se restauró y verificó una copia en un ensayo reproducible.', href: '/proyectos/recuperacion-servicio', cta: 'Ver ensayo de recuperación' },
+];
 ---
 <section class="wrap section-space" id="proyectos">
   <h2 class="section-title mb-7">{en ? 'Selected projects' : 'Proyectos seleccionados'}</h2>
+  <section id="casos-operativos" class="operations-projects" aria-labelledby="operations-heading">
+    <h3 id="operations-heading">{en ? 'Operations case studies' : 'Casos de operaciones'}</h3>
+    <div class="grid gap-4 md:grid-cols-3">
+      {operations.map(item => <article class="surface operations-card">
+        <h4>{item.title}</h4>
+        <p>{item.detail}</p>
+        <a class="text-link motion-link" href={item.href}>{item.cta} <span aria-hidden="true">→</span></a>
+      </article>)}
+    </div>
+  </section>
   <div class="grid gap-5 md:grid-cols-2 md:gap-6">
     {projects.map(project => (
       <article class:list={['project-card', { 'compact-project': ['passforge', 'taskapi'].includes(project.key) }]} data-reveal data-tone={project.key} id={'project-' + project.key}>
@@ -28,13 +47,6 @@ const en = lang === 'en';
       </article>
     ))}
   </div>
-  <aside class="quality-teaser surface">
-    <div>
-      <h3>{en ? 'Ticket quality review' : 'Revisión de calidad de tickets'}</h3>
-      <p>{en ? 'Three fictional tickets are ready to review. Open the flagged message, then confirm or dismiss the alert.' : 'Hay tres tickets ficticios listos para revisar. Abre el mensaje señalado y decide si corresponde confirmar o descartar la alerta.'}</p>
-    </div>
-    <a class="action secondary" href={en ? '/en/projects/quality-review' : '/proyectos/revision-calidad'}>{en ? 'Open the review queue' : 'Abrir la cola de revisión'} →</a>
-  </aside>
   <section class="quality-teaser surface" id="trabajo-independiente" aria-labelledby="independent-project">
     <div>
       <p class="eyebrow">{en ? 'Independent work' : 'Trabajo independiente'}</p>

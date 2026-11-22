@@ -186,6 +186,12 @@ a { color: inherit; }
 .quality-teaser p:not(.eyebrow) { color: var(--muted); }
 .quality-teaser .eyebrow { margin-bottom: .45rem; }
 #trabajo-independiente { scroll-margin-top: 5rem; }
+.operations-projects { margin-bottom: clamp(22px, 4vw, 42px); scroll-margin-top: 5rem; }
+.operations-projects h3 { font: 700 1.3rem/1.2 var(--font-display); margin-bottom: .8rem; }
+.operations-card { display: grid; grid-template-rows: auto 1fr auto; padding: clamp(16px, 2vw, 24px); gap: .55rem; }
+.operations-card h4 { font: 700 1.15rem/1.2 var(--font-display); }
+.operations-card p { color: var(--muted); }
+.operations-card a { justify-self: start; padding-inline: 0; }
 .quality-conversation li { padding: 10px 13px; background: var(--inset); border-radius: 8px; line-height: 1.5; }
 .quality-conversation li + li { margin: 0; }
 @media (width >= 800px) {

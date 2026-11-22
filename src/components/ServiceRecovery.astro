@@ -1,0 +1,92 @@
+---
+import '../styles/site.css';
+const { lang = 'es' } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en' : '/';
+const esPath = '/proyectos/recuperacion-servicio';
+const enPath = '/en/projects/service-recovery';
+const title = en ? 'Service recovery drill' : 'Ensayo de recuperación de servicio';
+const description = en
+  ? 'A reproducible local SQLite recovery drill: restore a backup, verify integrity and test functional reads with synthetic data.'
+  : 'Un ensayo local reproducible con SQLite: restaurar una copia, comprobar su integridad y validar lecturas funcionales con datos sintéticos.';
+const steps = en ? [
+  ['Prepare', 'Create 10,000 synthetic tickets and a consistent backup using the SQLite backup API.'],
+  ['Interrupt', 'Rename the original database to simulate its unavailability. Restore the backup to a separate path.'],
+  ['Verify', 'Compare SHA-256, run integrity_check and query counts, totals and an individual ticket in read-only mode.'],
+  ['Challenge', 'Corrupt a separate copy and confirm that both the hash comparison and database read reject it.'],
+] : [
+  ['Preparar', 'Crear 10.000 tickets sintéticos y una copia consistente con la API de backup de SQLite.'],
+  ['Interrumpir', 'Renombrar la base original para simular su indisponibilidad. Restaurar la copia en otra ruta.'],
+  ['Verificar', 'Comparar SHA-256, ejecutar integrity_check y consultar cantidades, totales y un ticket individual en modo de solo lectura.'],
+  ['Probar un fallo', 'Dañar una copia separada y comprobar que el hash y la lectura de la base detectan el problema.'],
+];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · Lucas Nieto</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(en ? enPath : esPath, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(esPath, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />
+    <script is:inline src="/theme-init.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{en ? 'Skip to content' : 'Ir al contenido'}</a>
+    <header class="site-header glass"><div class="wrap header-row">
+      <a class="brand" href={home}>Lucas Nieto</a>
+      <div class="languages" aria-label={en ? 'Language' : 'Idioma'}>
+        <a href={esPath} lang="es" aria-current={!en ? 'page' : undefined}>ES</a>
+        <a href={enPath} lang="en" aria-current={en ? 'page' : undefined}>EN</a>
+      </div>
+    </div></header>
+    <main class="wrap case-page recovery" id="main">
+      <a class="text-link case-back" href={home + '#casos-operativos'}>← {en ? 'Operations case studies' : 'Casos de operaciones'}</a>
+      <div class="case-grid">
+        <div><p class="eyebrow">DevOps · {en ? 'Local laboratory' : 'Laboratorio local'}</p><h1>{title}</h1></div>
+        <p class="intro">{description}</p>
+      </div>
+      <section class="surface recovery-panel" aria-labelledby="recovery-decision">
+        <p class="eyebrow">{en ? 'The decision' : 'La decisión'}</p>
+        <h2 id="recovery-decision">{en ? 'Verify the recovered data before declaring success' : 'Verificar los datos recuperados antes de dar por terminada la restauración'}</h2>
+        <p>{en ? 'In my work, we verify off-site copies before applying backup retention. This local drill focuses on the next step: opening the restored database and checking that routine queries return the expected results.' : 'En mi trabajo verificamos las copias externas antes de aplicar la retención de respaldos. Este ensayo local se centra en el paso siguiente: abrir la base restaurada y comprobar que las consultas habituales devuelven los resultados esperados.'}</p>
+        <ol class="recovery-steps">{steps.map(([label, text]) => <li><h3>{label}</h3><p>{text}</p></li>)}</ol>
+      </section>
+      <section class="surface recovery-panel" aria-labelledby="recovery-evidence">
+        <p class="eyebrow">{en ? 'Observed on 22 November 2026 · Windows · SQLite 3.53.1' : 'Observado el 22 de noviembre de 2026 · Windows · SQLite 3.53.1'}</p>
+        <h2 id="recovery-evidence">{en ? 'Recovered and checked' : 'Recuperado y comprobado'}</h2>
+        <dl class="recovery-metrics">
+          <div><dt>{en ? 'Recovered tickets' : 'Tickets recuperados'}</dt><dd>{en ? '10,000' : '10.000'}</dd></div>
+          <div><dt>{en ? 'Open tickets' : 'Tickets abiertos'}</dt><dd>{en ? '3,333' : '3.333'}</dd></div>
+          <div><dt>{en ? 'Local copy and checks' : 'Copia local y controles'}</dt><dd>{en ? '5.11 ms' : '5,11 ms'}</dd></div>
+        </dl>
+        <p>{en ? 'The 413,696-byte backup and restored file had identical SHA-256 hashes. SQLite returned integrity_check = ok. Read-only queries matched 10,000 rows, 3,333 open tickets, a total of 50,005,000 synthetic cents and the expected details for ticket 42. The deliberately damaged copy was rejected.' : 'La copia de 413.696 bytes y el archivo restaurado tuvieron el mismo SHA-256. SQLite devolvió integrity_check = ok. Las consultas de solo lectura coincidieron con 10.000 filas, 3.333 tickets abiertos, un total de 50.005.000 centavos sintéticos y el detalle esperado del ticket 42. La copia dañada intencionalmente fue rechazada.'}</p>
+      </section>
+      <section class="surface recovery-panel" aria-labelledby="recovery-limits">
+        <h2 id="recovery-limits">{en ? 'Scope of the evidence' : 'Alcance de la evidencia'}</h2>
+        <p>{en ? 'One local run with synthetic data. With the original database closed, the timer started at the file copy and ended after the hash comparison, integrity check and read-only queries. Production recovery has a separate scope that includes the network, storage and application restart.' : 'Una ejecución local con datos sintéticos. Con la base original cerrada, el cronómetro empezó al copiar el archivo y terminó tras comparar el hash, comprobar la integridad y ejecutar las consultas de solo lectura. Medir la recuperación en producción requiere incluir red, almacenamiento y reinicio de la aplicación.'}</p>
+        <p>{en ? 'Reproduce from the repository with Python 3.10 or later, using only the standard library. The script creates and cleans its own temporary directory; each run reports its own timing.' : 'Se reproduce desde el repositorio con Python 3.10 o posterior y solo su biblioteca estándar. El script crea y limpia su propio directorio temporal; cada ejecución informa su tiempo.'}</p>
+        <pre><code>python scripts/test-service-recovery.py</code></pre>
+        <a class="text-link" href="https://github.com/Gecko2087/portfolio/blob/main/scripts/test-service-recovery.py">{en ? 'View the drill script' : 'Ver el script del ensayo'} ↗</a>
+      </section>
+      <a class="text-link" href={home + '#contacto'}>{en ? 'Contact Lucas' : 'Contactar a Lucas'} →</a>
+    </main>
+    <footer class="wrap footer"><p>© {new Date().getFullYear()} Lucas Nieto</p></footer>
+  </body>
+</html>
+<style>
+  .recovery .case-grid { align-items: end; margin-block: 16px 30px; }
+  .recovery-panel { margin-block: 18px; padding: clamp(20px, 3vw, 36px); }
+  .recovery-panel h2 { font: 700 clamp(1.4rem, 3vw, 2rem)/1.2 var(--font-display); margin-block: 6px 16px; max-width: 34ch; }
+  .recovery-panel p { color: var(--muted); max-width: 88ch; }
+  .recovery-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; padding-left: 24px; margin-top: 30px; }
+  .recovery-steps h3 { font: 600 1.15rem var(--font-display); margin-bottom: 8px; }
+  .recovery-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-block: 24px; }
+  .recovery-metrics dt { color: var(--muted); font-size: .9rem; }
+  .recovery-metrics dd { margin: 8px 0; color: var(--accent); font: 700 clamp(1.6rem, 3vw, 2.3rem) var(--font-display); }
+  .recovery-panel pre { overflow-x: auto; padding: 18px; margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; font-size: .85rem; }
+  @media (max-width: 640px) { .recovery-steps, .recovery-metrics { grid-template-columns: 1fr; } }
+</style>
